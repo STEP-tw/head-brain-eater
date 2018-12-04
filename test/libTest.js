@@ -1,6 +1,7 @@
 let deepEqual = require('assert').deepEqual;
 let {
-  headOptions
+  headOptions,
+  head
 } = require('../src/lib.js');
 
 describe('headOptions', function(){
@@ -24,3 +25,24 @@ describe('headOptions', function(){
   });
 });
 
+describe('head', function() {
+  let files = {
+    file1: {
+      name: 't',
+      content: 'hi',
+    },
+  };
+  it('should return back the content of file given ', function() {
+    deepEqual(head("c", 5, files), 'hi');
+    deepEqual(head("n", 5, files), 'hi');
+  });
+
+  it('should return back the content of files given ', function() {
+    files.file2={
+      name : "t2",
+      content : "how are you"
+    }
+    deepEqual(head("c", 5, files), 'hi\nhow are you');
+    deepEqual(head("n", 5, files), 'hi\nhow are you');
+  });
+});
