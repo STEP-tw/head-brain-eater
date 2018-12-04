@@ -4,8 +4,8 @@ const cut = function(seperator,count,content){
 
 const headOptions = function(){
   let options  = {
-    n:x=>x,
-    c:x=>x
+    n : cut.bind(null,"\n"),
+    c : cut.bind(null,"")
   }
   return options;
 }
@@ -15,7 +15,7 @@ const head = function(option, count, files){
   let filteredContent  = "";
   let delimeter = "";
   for(let file of Object.values(files)){
-    filteredContent  = filteredContent + delimeter + filter(file.content);
+    filteredContent  = filteredContent + delimeter + filter(count,file.content);
     delimeter = "\n";
   }
   return filteredContent;
