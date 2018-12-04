@@ -2,6 +2,7 @@ let deepEqual = require('assert').deepEqual;
 let {
   headOptions,
   cut,
+  classifyParameters,
   head
 } = require('../src/lib.js');
 
@@ -55,6 +56,13 @@ it('should return specified number of line  of  the content given when c is pass
 describe('cut',function(){
   it('should cut the given text by given seperator and return specified no of portions',function(){
     deepEqual(cut("-",3,"1-2-3-4-5"),"1-2-3");
+    deepEqual(cut("\n",0,"1\n2\n3"),"");
+  });
+});
+
+describe('classifyParameters',function(){
+  it('should return an object with keys filter,count and files ',function(){
+    deepEqual(Object.keys(classifyParameters()),["filter","count","files"]);
     deepEqual(cut("\n",0,"1\n2\n3"),"");
   });
 })
