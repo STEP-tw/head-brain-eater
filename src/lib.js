@@ -1,3 +1,7 @@
+const cut = function(seperator,count,content){
+  return content.split(seperator).slice(0,count).join(seperator);
+}
+
 const headOptions = function(){
   let options  = {
     n:x=>x,
@@ -19,5 +23,6 @@ const head = function(option, count, files){
 
 module.exports = {
   head,
-  headOptions
+  headOptions,
+  cut
 }

@@ -1,6 +1,7 @@
 let deepEqual = require('assert').deepEqual;
 let {
   headOptions,
+  cut,
   head
 } = require('../src/lib.js');
 
@@ -46,3 +47,10 @@ describe('head', function() {
     deepEqual(head("n", 5, files), 'hi\nhow are you');
   });
 });
+
+describe('cut',function(){
+  it('should cut the given text by given seperator and return specified no of portions',function(){
+    deepEqual(cut("-",3,"1-2-3-4-5"),"1-2-3");
+    deepEqual(cut("\n",0,"1\n2\n3"),"");
+  });
+})
