@@ -42,16 +42,23 @@ const head = function(option, count, files) {
   let filter = headOptions()[option];
   let filteredContent = '';
   let delimeter = '';
-  for (let file of Object.values(files)) {
+  for (let file of files) {
     filteredContent = filteredContent + delimeter + filter(count, file.content);
     delimeter = '\n';
   }
   return filteredContent;
 };
 
+const getFile = function(readFile,fileName){
+  let content = readFile(fileName,"utf-8");
+  let name = fileName;
+  return {content,name};
+}
+
 module.exports = {
   head,
   headOptions,
   cut,
+  getFile,
   classifyParameters
 };

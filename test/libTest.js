@@ -29,12 +29,12 @@ describe('headOptions', function(){
 });
 
 describe('head', function() {
-  let files = {
-    file1: {
+  let files = [
+    {
       name: 't',
       content: 'Today is a great day\nyes\nha',
     },
-  };
+  ];
   it('should return specified number of character of  the content given when c is passed as parameter ', function() {
     deepEqual(head("c", 5, files), 'Today');
   });
@@ -44,10 +44,10 @@ it('should return specified number of line  of  the content given when c is pass
   });
 
   it('should return specified number of lines\\characters of the contents  given ', function() {
-    files.file2={
+    files.push({
       name : "t2",
       content : "how are you"
-    }
+    });
     deepEqual(head("c", 5, files),'Today\nhow a' );
     deepEqual(head("n", 2, files), 'Today is a great day\nyes\nhow are you');
   });
