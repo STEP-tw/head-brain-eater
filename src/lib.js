@@ -1,5 +1,26 @@
-const classifyParameters = function(parameter) {
-  return {filter: undefined, count: undefined, files: undefined};
+const isNaN = function(num){
+  return num*0 != 0;
+}
+
+const classifyParameters = function(parameters) {
+  let filter = "n";
+  let firstArg = parameters[0];
+  let secondArg = parameters[1];
+  let firstFileNameIndex = 0;
+  let count = 10;
+
+  if(firstArg.match("-") != null){
+    firstFileNameIndex++;
+    count = +firstArg.slice(1);
+    if(isNaN(count)){
+      filter = firstArg[1];
+      count = +firstArg.slice(2) || firstFileNameIndex++ && +secondArg;
+    }
+  }
+
+  let  fileNames = parameters.slice(firstFileNameIndex);
+
+  return {filter, count, fileNames};
 };
 
 const cut = function(seperator, count, content) {

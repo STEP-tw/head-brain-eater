@@ -62,7 +62,21 @@ describe('cut',function(){
 
 describe('classifyParameters',function(){
   it('should return an object with keys filter,count and files ',function(){
-    deepEqual(Object.keys(classifyParameters()),["filter","count","files"]);
-    deepEqual(cut("\n",0,"1\n2\n3"),"");
+    deepEqual(Object.keys(classifyParameters("-n3Tilak")),["filter","count","fileNames"]);
+  });
+
+  it('should return an object with  filter,count and files ',function(){
+    deepEqual(classifyParameters(["file1"]),{ filter: 'n', count: 10, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["-n5","file1"]),{ filter: 'n', count: 5, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["-n","5","file1"]),{ filter: 'n', count: 5, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["-5","file1"]),{ filter: 'n', count: 5, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["file1","file2"]),{ filter: 'n', count: 10, fileNames: [ 'file1', 'file2' ] })
+    deepEqual(classifyParameters(["-n","5","file1","file2"]),{ filter: 'n', count: 5, fileNames: [ 'file1','file2' ] })
+    deepEqual(classifyParameters(["-n5","file1","file2"]),{ filter: 'n', count: 5, fileNames: [ 'file1', 'file2' ] })
+    deepEqual(classifyParameters(["-5","file1","file2"]),{ filter: 'n', count: 5, fileNames: [ 'file1', 'file2' ] })
+    deepEqual(classifyParameters(["-c5","file1"]),{ filter: 'c', count: 5, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["-c","5","file1"]),{ filter: 'c', count: 5, fileNames: [ 'file1' ] })
+    deepEqual(classifyParameters(["-c5","file1","file2"]),{ filter: 'c', count: 5, fileNames: [ 'file1', 'file2' ] })
+    deepEqual(classifyParameters(["-c","5","file1","file2"]),{ filter: 'c', count: 5, fileNames: [ 'file1', 'file2' ] })
   });
 })
