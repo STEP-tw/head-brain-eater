@@ -42,8 +42,13 @@ const head = function(option, count, files) {
   let filter = headOptions()[option];
   let filteredContent = '';
   let delimeter = '';
+  if(files.length == 1){
+    return filter(count,files[0].content);
+  }
+
   for (let file of files) {
-    filteredContent = filteredContent + delimeter + filter(count, file.content);
+    let heading = "==>"+file.name+"<==\n";
+    filteredContent = filteredContent + delimeter + heading +filter(count, file.content);
     delimeter = '\n';
   }
   return filteredContent;
