@@ -4,6 +4,7 @@ let {
   headOptions,
   cut,
   classifyParameters,
+  validateParameters,
   head
 } = require('../src/lib.js');
 
@@ -92,4 +93,22 @@ describe("displayFiles",function(){
     files.push({name:"file2",content:"hello"});
     deepEqual(displayFiles(files),'==> file1 <==\nhi\n\n==> file2 <==\nhello');
   })
+})
+
+describe("validateParameters",function(){
+
+  it('should return illegal count when 0 is given as 2nd parameter',function(){
+    deepEqual(validateParameters("n",0,"file"),'head: illegal lines count -- 0');
+  });
+
+ it('should return illegal option  when anything other than n or c  is given as 1nd parameter',function(){
+    deepEqual(validateParameters("e",0,"file"),'head: illegal option -- e');
+  });
+
+ it('should return undefined when 1st parameter is n or c and 2nd parameter is a natural number',function(){
+    deepEqual(validateParameters("c",1,"file"),undefined);
+    deepEqual(validateParameters("n",33,"file"),undefined);
+  });
+
+
 })

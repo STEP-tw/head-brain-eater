@@ -68,11 +68,27 @@ const readFiles = function(readFileSync,fileNames){
   return fileNames.map(readFile.bind(null,readFileSync))
 }
 
+const validateParameters = function(option,count,fileNames){
+  let types = {n:"lines",c:"bytes"};
+  let errorMessage = undefined;
+  if(option != 'n' && option != 'c'){
+    errorMessage = "head: illegal option -- "+option;
+    return errorMessage;
+  }
+
+  if(count <= 0){
+    errorMessage = "head: illegal "+types[option]+" count -- 0";
+    return errorMessage;
+  }
+}
+
+
 module.exports = {
   head,
   headOptions,
   cut,
   readFiles,
   displayFiles,
+  validateParameters,
   classifyParameters
 };

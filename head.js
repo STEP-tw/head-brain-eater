@@ -1,13 +1,19 @@
 let {
-    head,
-    classifyParameters,
-    readFiles
-    }= require("./src/lib.js");
+  head,
+  classifyParameters,
+  validateParameters,
+  readFiles
+  }= require("./src/lib.js");
 let {readFileSync} = require("fs");
 
 const main = function(){
   let parameters = process.argv.slice(2);
   let {filter,count,fileNames} = classifyParameters(parameters);
+  let errorMessage = validateParameters(filter,count,fileNames);
+  if(errorMessage != undefined){
+    console.log(errorMessage);
+    return 0;
+  }
   let files = readFiles(readFileSync,fileNames)
   console.log(head(filter,count,files));
 }
