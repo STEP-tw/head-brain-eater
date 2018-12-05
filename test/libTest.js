@@ -97,8 +97,10 @@ describe("displayFiles",function(){
 
 describe("validateParameters",function(){
 
-  it('should return illegal count when 0 is given as 2nd parameter',function(){
+  it('should return illegal count when not natural number  is given as 2nd parameter',function(){
     deepEqual(validateParameters("n",0,"file"),'head: illegal lines count -- 0');
+    deepEqual(validateParameters("n",-1,"file"),'head: illegal lines count -- -1');
+    deepEqual(validateParameters("n","file1","file"),'head: illegal lines count -- file1');
   });
 
  it('should return illegal option  when anything other than n or c  is given as 1nd parameter',function(){

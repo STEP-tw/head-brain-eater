@@ -13,7 +13,7 @@ const classifyParameters = function(parameters) {
       count = +firstArg.slice(2);
       if(firstArg.length == 2){
         firstFileNameIndex++;
-        count = +secondArg;
+        count = secondArg;
       }
     }
   }
@@ -76,8 +76,8 @@ const validateParameters = function(option,count,fileNames){
     return errorMessage;
   }
 
-  if(count <= 0){
-    errorMessage = "head: illegal "+types[option]+" count -- 0";
+  if(count <= 0 ||isNaN(count)){
+    errorMessage = "head: illegal "+types[option]+" count -- "+count;
     return errorMessage;
   }
 }
