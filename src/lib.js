@@ -85,11 +85,15 @@ const validateParameters = function(option,count,fileNames){
   let types = {n:"lines",c:"bytes"};
   let errorMessage = undefined;
   if(option != 'n' && option != 'c'){
-    errorMessage = "head: illegal option -- "+option;
+    errorMessage = "head: illegal option -- "+option+"\nusage: head [-n lines | -c bytes] [file ...]";
     return errorMessage;
   }
-
-  if(count <= 0 ||isNaN(count)){
+  
+  if(count == undefined ){
+    errorMessage ="head: option requires an argument -- "+option+"\nusage: head [-n lines | -c bytes] [file ...]";
+    return errorMessage;
+  }
+  if(count <= 0 || isNaN(count)){
     errorMessage = "head: illegal "+types[option]+" count -- "+count;
     return errorMessage;
   }

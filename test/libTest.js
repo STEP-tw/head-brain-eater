@@ -105,8 +105,12 @@ describe("validateParameters",function(){
     deepEqual(validateParameters("n","file1","file"),'head: illegal lines count -- file1');
   });
 
+  it("it should return that requires arguments when n or c is given as 1st parameter and 2nd parameter is undefined",function(){
+    deepEqual(validateParameters("e",undefined,"file"),'head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]');
+  });
+
  it('should return illegal option  when anything other than n or c  is given as 1nd parameter',function(){
-    deepEqual(validateParameters("e",0,"file"),'head: illegal option -- e');
+    deepEqual(validateParameters("e",0,"file"),'head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]');
   });
 
  it('should return undefined when 1st parameter is n or c and 2nd parameter is a natural number',function(){
