@@ -52,8 +52,8 @@ it('should return specified number of line  of  the content given when c is pass
       content : "how are you",
       doesFileExist : true
     });
-    deepEqual(head("c", 5, files),'==> t <==\nToday\n==> t2 <==\nhow a' );
-    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n==> t2 <==\nhow are you');
+    deepEqual(head("c", 5, files),'==> t <==\nToday\n\n==> t2 <==\nhow a' );
+    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n\n==> t2 <==\nhow are you');
   });
 });
 

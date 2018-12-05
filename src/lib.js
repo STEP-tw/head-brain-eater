@@ -54,7 +54,7 @@ const head = function(option, count, files) {
     }
     return filteredFiles[0].content;
   }
-  return filteredFiles.map(displayFile).join("\n");
+  return filteredFiles.map(displayFile).join("\n\n");
 };
 
 const displayFile = function({name,content,doesFileExist}){
