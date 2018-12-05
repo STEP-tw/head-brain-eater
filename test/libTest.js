@@ -1,5 +1,6 @@
 let deepEqual = require('assert').deepEqual;
 let {
+  displayFiles,
   headOptions,
   cut,
   classifyParameters,
@@ -48,8 +49,8 @@ it('should return specified number of line  of  the content given when c is pass
       name : "t2",
       content : "how are you"
     });
-    deepEqual(head("c", 5, files),'==> t <==\nToday\n==> t2 <==\nhow a' );
-    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n==> t2 <==\nhow are you');
+    deepEqual(head("c", 5, files),'==> t <==\nToday\n\n==> t2 <==\nhow a' );
+    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n\n==> t2 <==\nhow are you');
   });
 });
 
@@ -79,4 +80,16 @@ describe('classifyParameters',function(){
     deepEqual(classifyParameters(["-c5","file1","file2"]),{ filter: 'c', count: 5, fileNames: [ 'file1', 'file2' ] })
     deepEqual(classifyParameters(["-c","5","file1","file2"]),{ filter: 'c', count: 5, fileNames: [ 'file1', 'file2' ] })
   });
+})
+
+describe("displayFiles",function(){
+  let files = [{name:"file1",content:"hi"}];
+  it('should return the content of files when only one file is given',function(){
+    deepEqual(displayFiles(files),"hi");
+  });
+
+  it('should return each file heading and file content joined together',function(){
+    files.push({name:"file2",content:"hello"});
+    deepEqual(displayFiles(files),'==> file1 <==\nhi\n\n==> file2 <==\nhello');
+  })
 })

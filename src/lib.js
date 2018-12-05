@@ -54,19 +54,25 @@ const displayFiles = function(files){
   if(files.length == 1){
     return files[0].content;
   }
-  return files.map(({name,content})=>{return "==> "+name+" <==\n"+content}).join("\n");
+  return files.map(({name,content})=>{return "==> "+name+" <==\n"+content}).join("\n\n");
 }
 
-const getFile = function(readFile,fileName){
-  let content = readFile(fileName,"utf-8");
+const readFile = function(readFileSync,fileName){
+  let content = readFileSync(fileName,"utf-8");
   let name = fileName;
+  content = content.slice(0,content.length-1);//removing extra \n from end
   return {content,name};
+}
+
+const readFiles = function(readFileSync,fileNames){
+  return fileNames.map(readFile.bind(null,readFileSync))
 }
 
 module.exports = {
   head,
   headOptions,
   cut,
-  getFile,
+  readFiles,
+  displayFiles,
   classifyParameters
 };
