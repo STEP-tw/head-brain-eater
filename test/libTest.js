@@ -48,8 +48,8 @@ it('should return specified number of line  of  the content given when c is pass
       name : "t2",
       content : "how are you"
     });
-    deepEqual(head("c", 5, files),'==>t<==\nToday\n==>t2<==\nhow a' );
-    deepEqual(head("n", 2, files), '==>t<==\nToday is a great day\nyes\n==>t2<==\nhow are you');
+    deepEqual(head("c", 5, files),'==> t <==\nToday\n==> t2 <==\nhow a' );
+    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n==> t2 <==\nhow are you');
   });
 });
 

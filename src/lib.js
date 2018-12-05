@@ -1,7 +1,3 @@
-const isNaN = function(num){
-  return num*0 != 0;
-}
-
 const classifyParameters = function(parameters) {
   let filter = "n";
   let firstArg = parameters[0];
@@ -14,10 +10,13 @@ const classifyParameters = function(parameters) {
     count = +firstArg.slice(1);
     if(isNaN(count)){
       filter = firstArg[1];
-      count = +firstArg.slice(2) || firstFileNameIndex++ && +secondArg;
+      count = +firstArg.slice(2);
+      if(firstArg.length == 2){
+        firstFileNameIndex++;
+        count = +secondArg;
+      }
     }
   }
-
   let  fileNames = parameters.slice(firstFileNameIndex);
 
   return {filter, count, fileNames};
@@ -38,21 +37,25 @@ const headOptions = function() {
   return options;
 };
 
+const filterContent = function(filter,count,file){
+  let name = file.name;
+  let content = filter(count,file.content);
+  return {name,content};
+}
+
+
 const head = function(option, count, files) {
   let filter = headOptions()[option];
-  let filteredContent = '';
-  let delimeter = '';
-  if(files.length == 1){
-    return filter(count,files[0].content);
-  }
-
-  for (let file of files) {
-    let heading = "==>"+file.name+"<==\n";
-    filteredContent = filteredContent + delimeter + heading +filter(count, file.content);
-    delimeter = '\n';
-  }
-  return filteredContent;
+  let filteredFiles = files.map(filterContent.bind(null,filter,count));
+  return displayFiles(filteredFiles);
 };
+
+const displayFiles = function(files){
+  if(files.length == 1){
+    return files[0].content;
+  }
+  return files.map(({name,content})=>{return "==> "+name+" <==\n"+content}).join("\n");
+}
 
 const getFile = function(readFile,fileName){
   let content = readFile(fileName,"utf-8");
