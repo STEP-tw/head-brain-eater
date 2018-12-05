@@ -4,7 +4,7 @@ let {
   validateParameters,
   readFiles
   }= require("./src/lib.js");
-let {readFileSync} = require("fs");
+let {readFileSync,existsSync} = require("fs");
 
 const main = function(){
   let parameters = process.argv.slice(2);
@@ -14,7 +14,7 @@ const main = function(){
     console.log(errorMessage);
     return 0;
   }
-  let files = readFiles(readFileSync,fileNames)
+  let files = readFiles(readFileSync,fileNames,existsSync)
   console.log(head(filter,count,files));
 }
 

@@ -1,6 +1,6 @@
 let deepEqual = require('assert').deepEqual;
 let {
-  displayFiles,
+  displayFile,
   headOptions,
   cut,
   classifyParameters,
@@ -35,6 +35,7 @@ describe('head', function() {
     {
       name: 't',
       content: 'Today is a great day\nyes\nha',
+      doesFileExist : true
     },
   ];
   it('should return specified number of character of  the content given when c is passed as parameter ', function() {
@@ -48,10 +49,11 @@ it('should return specified number of line  of  the content given when c is pass
   it('should return specified number of lines\\characters of the contents  given ', function() {
     files.push({
       name : "t2",
-      content : "how are you"
+      content : "how are you",
+      doesFileExist : true
     });
-    deepEqual(head("c", 5, files),'==> t <==\nToday\n\n==> t2 <==\nhow a' );
-    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n\n==> t2 <==\nhow are you');
+    deepEqual(head("c", 5, files),'==> t <==\nToday\n==> t2 <==\nhow a' );
+    deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n==> t2 <==\nhow are you');
   });
 });
 
@@ -83,15 +85,15 @@ describe('classifyParameters',function(){
   });
 })
 
-describe("displayFiles",function(){
-  let files = [{name:"file1",content:"hi"}];
-  it('should return the content of files when only one file is given',function(){
-    deepEqual(displayFiles(files),"hi");
+describe("displayFile",function(){
+  let files = {name:"file1",content:"hi",doesFileExist:true};
+  it('should return the content with heading when file name ,file content and doesFileExist is given',function(){
+    deepEqual(displayFile(files),'==> file1 <==\nhi');
   });
 
-  it('should return each file heading and file content joined together',function(){
-    files.push({name:"file2",content:"hello"});
-    deepEqual(displayFiles(files),'==> file1 <==\nhi\n\n==> file2 <==\nhello');
+  it('should return file not found error when doesFileExist is false',function(){
+  files = {name:"file1",content:"hi",doesFileExist:false};
+    deepEqual(displayFile(files),'head: file1: No such file or directory');
   })
 })
 

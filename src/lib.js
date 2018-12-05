@@ -40,32 +40,45 @@ const headOptions = function() {
 const filterContent = function(filter,count,file){
   let name = file.name;
   let content = filter(count,file.content);
-  return {name,content};
+  let doesFileExist = file.doesFileExist;
+  return {name,content,doesFileExist};
 }
 
 
 const head = function(option, count, files) {
   let filter = headOptions()[option];
   let filteredFiles = files.map(filterContent.bind(null,filter,count));
-  return displayFiles(filteredFiles);
+  if(filteredFiles.length == 1){
+    if(!filteredFiles[0].doesFileExist){
+      return "head: "+filteredFiles[0].name+": No such file or directory";
+    }
+    return filteredFiles[0].content;
+  }
+  return filteredFiles.map(displayFile).join("\n");
 };
 
-const displayFiles = function(files){
-  if(files.length == 1){
-    return files[0].content;
+const displayFile = function({name,content,doesFileExist}){
+  if(!doesFileExist){
+    return "head: "+name+": No such file or directory";
   }
-  return files.map(({name,content})=>{return "==> "+name+" <==\n"+content}).join("\n\n");
+  return "==> "+name+" <==\n"+content;
 }
 
-const readFile = function(readFileSync,fileName){
-  let content = readFileSync(fileName,"utf-8");
+const readFile = function(readFileSync,exists,fileName){
+  let doesFileExist = true;
   let name = fileName;
+  let content = "";
+  if(!exists(name)){
+    doesFileExist = false;
+    return {name,content,doesFileExist}  
+  }
+  content = readFileSync(fileName,"utf-8");
   content = content.slice(0,content.length-1);//removing extra \n from end
-  return {content,name};
+  return {content,name,doesFileExist};
 }
 
-const readFiles = function(readFileSync,fileNames){
-  return fileNames.map(readFile.bind(null,readFileSync))
+const readFiles = function(readFileSync,fileNames,exists){
+  return fileNames.map(readFile.bind(null,readFileSync,exists))
 }
 
 const validateParameters = function(option,count,fileNames){
@@ -88,7 +101,7 @@ module.exports = {
   headOptions,
   cut,
   readFiles,
-  displayFiles,
+  displayFile,
   validateParameters,
   classifyParameters
 };
