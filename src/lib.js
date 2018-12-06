@@ -73,7 +73,7 @@ const readFile = function(readFileSync,exists,fileName){
     return {name,content,doesFileExist}  
   }
   content = readFileSync(fileName,"utf-8");
-  content = content.slice(0,content.length-1);//removing extra \n from end
+  content = content.trim();//removing extra \n from end
   return {content,name,doesFileExist};
 }
 
@@ -84,21 +84,32 @@ const readFiles = function(readFileSync,fileNames,exists){
 const validateParameters = function(option,count,fileNames){
   let types = {n:"line",c:"byte"};
   let errorMessage = undefined;
-  if(option != 'n' && option != 'c'){
+
+  if(!isValidOption(option)){
     errorMessage = "head: illegal option -- "+option+"\nusage: head [-n lines | -c bytes] [file ...]";
     return errorMessage;
   }
-  
-  if(count == undefined ){
+  if(isUndefined(count)){
     errorMessage ="head: option requires an argument -- "+option+"\nusage: head [-n lines | -c bytes] [file ...]";
     return errorMessage;
   }
-  if(count <= 0 || isNaN(count)){
+  if(!isNaturalNum(count)){
     errorMessage = "head: illegal "+types[option]+" count -- "+count;
     return errorMessage;
   }
 }
 
+const isValidOption = function(option){
+  return option == 'n' || option == 'c';
+}
+
+const isUndefined = function(ele){
+  return ele == undefined;
+}
+
+const isNaturalNum = function(num){
+  return !isNaN(num) && num > 0;
+}
 
 module.exports = {
   head,
