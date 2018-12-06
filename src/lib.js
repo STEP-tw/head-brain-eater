@@ -73,11 +73,11 @@ const displayFile = function({name,content,exists}){
   return "==> "+name+" <==\n"+content;
 }
 
-const readFile = function(readFileSync,exists,fileName){
+const readFile = function(readFileSync,doesFileExist,fileName){
   let exists = true;
   let name = fileName;
   let content = "";
-  if(!exists(name)){
+  if(!doesFileExist(name)){
     exists = false;
     return {name,content,exists}  
   }
