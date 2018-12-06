@@ -8,7 +8,7 @@ const classifyParameters = function(parameters) {
   if(firstArg.match("-") != null){
     firstFileNameIndex++;
     count = +firstArg.slice(1);
-    if(isNaN(count)){
+    if(isNaN(count) || count < 0){
       filter = firstArg[1];
       count = +firstArg.slice(2);
       if(firstArg.length == 2){
