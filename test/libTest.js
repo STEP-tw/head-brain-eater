@@ -101,6 +101,7 @@ describe("validateParameters",function(){
 
   it('should return illegal count when not natural number  is given as 2nd parameter',function(){
     deepEqual(validateParameters("n",0,"file"),'head: illegal line count -- 0');
+    deepEqual(validateParameters("n",'a',"file"),'head: illegal line count -- a');
     deepEqual(validateParameters("n",-1,"file"),'head: illegal line count -- -1');
     deepEqual(validateParameters("n",-1,"file"),'head: illegal line count -- -1');
     deepEqual(validateParameters("c","file1","file"),'head: illegal byte count -- file1');
