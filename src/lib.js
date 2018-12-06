@@ -82,7 +82,7 @@ const readFiles = function(readFileSync,fileNames,exists){
 }
 
 const validateParameters = function(option,count,fileNames){
-  let types = {n:"lines",c:"bytes"};
+  let types = {n:"line",c:"byte"};
   let errorMessage = undefined;
   if(option != 'n' && option != 'c'){
     errorMessage = "head: illegal option -- "+option+"\nusage: head [-n lines | -c bytes] [file ...]";

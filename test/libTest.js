@@ -100,9 +100,10 @@ describe("displayFile",function(){
 describe("validateParameters",function(){
 
   it('should return illegal count when not natural number  is given as 2nd parameter',function(){
-    deepEqual(validateParameters("n",0,"file"),'head: illegal lines count -- 0');
-    deepEqual(validateParameters("n",-1,"file"),'head: illegal lines count -- -1');
-    deepEqual(validateParameters("n","file1","file"),'head: illegal lines count -- file1');
+    deepEqual(validateParameters("n",0,"file"),'head: illegal line count -- 0');
+    deepEqual(validateParameters("n",-1,"file"),'head: illegal line count -- -1');
+    deepEqual(validateParameters("n",-1,"file"),'head: illegal line count -- -1');
+    deepEqual(validateParameters("c","file1","file"),'head: illegal byte count -- file1');
   });
 
   it("it should return that requires arguments when n or c is given as 1st parameter and 2nd parameter is undefined",function(){
