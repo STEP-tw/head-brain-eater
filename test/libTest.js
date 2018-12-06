@@ -35,7 +35,7 @@ describe('head', function() {
     {
       name: 't',
       content: 'Today is a great day\nyes\nha',
-      doesFileExist : true
+      exists : true
     },
   ];
   it('should return specified number of character of  the content given when c is passed as parameter ', function() {
@@ -50,7 +50,7 @@ it('should return specified number of line  of  the content given when c is pass
     files.push({
       name : "t2",
       content : "how are you",
-      doesFileExist : true
+      exists : true
     });
     deepEqual(head("c", 5, files),'==> t <==\nToday\n\n==> t2 <==\nhow a' );
     deepEqual(head("n", 2, files), '==> t <==\nToday is a great day\nyes\n\n==> t2 <==\nhow are you');
@@ -86,13 +86,13 @@ describe('classifyParameters',function(){
 })
 
 describe("displayFile",function(){
-  let files = {name:"file1",content:"hi",doesFileExist:true};
-  it('should return the content with heading when file name ,file content and doesFileExist is given',function(){
+  let files = {name:"file1",content:"hi",exists:true};
+  it('should return the content with heading when file name ,file content and exists is given',function(){
     deepEqual(displayFile(files),'==> file1 <==\nhi');
   });
 
-  it('should return file not found error when doesFileExist is false',function(){
-  files = {name:"file1",content:"hi",doesFileExist:false};
+  it('should return file not found error when exists is false',function(){
+  files = {name:"file1",content:"hi",exists:false};
     deepEqual(displayFile(files),'head: file1: No such file or directory');
   })
 })

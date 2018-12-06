@@ -1,3 +1,7 @@
+let isOptionProvided = function(arg){
+  return arg.startsWith("-") ;
+}
+
 const classifyParameters = function(parameters) {
   let filter = "n";
   let firstArg = parameters[0];
@@ -5,10 +9,10 @@ const classifyParameters = function(parameters) {
   let firstFileNameIndex = 0;
   let count = 10;
 
-  if(firstArg.match("-") != null){
+  if(isOptionProvided(firstArg)){
     firstFileNameIndex++;
     count = firstArg.slice(1);
-    if(isNaN(count) || count < 0){
+    if(!isNaturalNum(count)){
       filter = firstArg[1];
       count = firstArg.slice(2);
       if(firstArg.length == 2){
@@ -40,41 +44,46 @@ const headOptions = function() {
 const filterContent = function(filter,count,file){
   let name = file.name;
   let content = filter(count,file.content);
-  let doesFileExist = file.doesFileExist;
-  return {name,content,doesFileExist};
+  let exists = file.exists;
+  return {name,content,exists};
+}
+
+const hasOnlyOneEle = function(elements){
+  return elements.length == 1;
 }
 
 
 const head = function(option, count, files) {
   let filter = headOptions()[option];
   let filteredFiles = files.map(filterContent.bind(null,filter,count));
-  if(filteredFiles.length == 1){
-    if(!filteredFiles[0].doesFileExist){
-      return "head: "+filteredFiles[0].name+": No such file or directory";
+  if(hasOnlyOneEle(files)){
+    let file = filteredFiles[0];
+    if(!file.exists){
+      return "head: "+file.name+": No such file or directory";
     }
-    return filteredFiles[0].content;
+    return file.content;
   }
   return filteredFiles.map(displayFile).join("\n\n");
 };
 
-const displayFile = function({name,content,doesFileExist}){
-  if(!doesFileExist){
+const displayFile = function({name,content,exists}){
+  if(!exists){
     return "head: "+name+": No such file or directory";
   }
   return "==> "+name+" <==\n"+content;
 }
 
 const readFile = function(readFileSync,exists,fileName){
-  let doesFileExist = true;
+  let exists = true;
   let name = fileName;
   let content = "";
   if(!exists(name)){
-    doesFileExist = false;
-    return {name,content,doesFileExist}  
+    exists = false;
+    return {name,content,exists}  
   }
   content = readFileSync(fileName,"utf-8");
   content = content.trim();//removing extra \n from end
-  return {content,name,doesFileExist};
+  return {content,name,exists};
 }
 
 const readFiles = function(readFileSync,fileNames,exists){
