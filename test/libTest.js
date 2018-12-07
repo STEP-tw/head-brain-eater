@@ -1,6 +1,7 @@
 let deepEqual = require('assert').deepEqual;
 let {
   displayFile,
+  runHead,
   readFiles,
   headOptions,
   cut,
@@ -72,11 +73,14 @@ describe('head', function() {
     );
   });
 
-  it('should return no such file when given input file objects\'s exists key is false',function(){
-    let files = [{
-    name: 'file1',
-    content : "",
-    exists : false}];
+  it("should return no such file when given input file objects's exists key is false", function() {
+    let files = [
+      {
+        name: 'file1',
+        content: '',
+        exists: false,
+      },
+    ];
     deepEqual(head('c', 5, files), 'head: file1: No such file or directory');
   });
 });
@@ -188,17 +192,16 @@ describe('validateParameters', function() {
       'head: illegal line count -- -1',
     );
     deepEqual(
-      validateParameters('n', -1, 'file'),
-      'head: illegal line count -- -1',
-    );
-    deepEqual(
       validateParameters('c', 'file1', 'file'),
       'head: illegal byte count -- file1',
     );
   });
 
-  it('should return this option requires an argument when count is undefined',function(){
-     deepEqual(validateParameters('c', undefined, 'file'),'head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]');
+  it('should return this option requires an argument when count is undefined', function() {
+    deepEqual(
+      validateParameters('c', undefined, 'file'),
+      'head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]',
+    );
   });
 
   it('should return that requires arguments when n or c is given as 1st parameter and 2nd parameter is undefined', function() {
@@ -240,5 +243,35 @@ describe('readFiles', function() {
         name: 'file3',
       },
     ]);
+  });
+});
+
+describe('runHead', function() {
+  it('should return head result of given file when valid parameters and files are given', function() {
+    deepEqual(runHead(['-n5', 'file1'], readLine, exists), 'this is file1');
+    deepEqual(runHead(['-c5', 'file1'], readLine, exists), 'this ');
+    deepEqual(
+      runHead(['-c5', 'file1', 'file2'], readLine, exists),
+      '==> file1 <==\nthis \n\n==> file2 <==\nthis ',
+    );
+  });
+
+  it('should return error message when invalid parameters are given', function() {
+    deepEqual(
+      runHead(['-n', 0, 'file'], readLine, exists),
+      'head: illegal line count -- 0',
+    );
+    deepEqual(
+      runHead(['-c', 'file1', 'file'], readLine, exists),
+      'head: illegal byte count -- file1',
+    );
+    deepEqual(
+      runHead(['-c', undefined, 'file'], readLine, exists),
+      'head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]',
+    );
+    deepEqual(
+      runHead(['-e', 0, 'file'], readLine, exists),
+      'head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]',
+    );
   });
 });

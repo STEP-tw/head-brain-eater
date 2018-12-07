@@ -125,6 +125,16 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
+const runHead = function(parameters, readFileSync, existsSync) {
+  let {filter, count, fileNames} = classifyParameters(parameters);
+  let errorMessage = validateParameters(filter, count, fileNames);
+  if (errorMessage != undefined) {
+    return errorMessage;
+  }
+  let files = readFiles(readFileSync, fileNames, existsSync);
+  return head(filter, count, files);
+};
+
 module.exports = {
   head,
   headOptions,
@@ -132,6 +142,7 @@ module.exports = {
   readFiles,
   displayFile,
   validateParameters,
+  runHead,
   classifyParameters,
-  readFiles
+  readFiles,
 };
