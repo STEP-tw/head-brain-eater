@@ -147,7 +147,10 @@ const validateParameters = function (option, count, type) {
   }
   if (!isNaturalNum(count)) {
     if (type == 'tail') {
-      return '';
+      if(count == 0){
+        return "";
+      }
+      return "tail: illegal offset -- "+count;
     }
     errorMessage = 'head: illegal ' + types[option] + ' count -- ' + count;
     return errorMessage;

@@ -296,7 +296,7 @@ describe('tail', function () {
 
   it('should return error message when invalid parameters are given', function () {
     deepEqual(tail(['-n', 0, 'file'], readLine, exists), '');
-    deepEqual(tail(['-c', 'file1', 'file'], readLine, exists), '');
+    deepEqual(tail(['-c', 'file1', 'file'], readLine, exists), 'tail: illegal offset -- file1');
     deepEqual(
       tail(['-c', undefined, 'file'], readLine, exists),
       'tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]',
