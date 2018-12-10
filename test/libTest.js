@@ -283,10 +283,10 @@ describe('head', function() {
 describe('tail', function() {
   it('should return tail result of given file when valid parameters and files are given', function() {
     deepEqual(tail(['-n5', 'file1'], readLine, exists), 'this is file1');
-    deepEqual(tail(['-c5', 'file1'], readLine, exists), 'this ');
+    deepEqual(tail(['-c5', 'file1'], readLine, exists), '1elif');
     deepEqual(
       tail(['-c5', 'file1', 'file2'], readLine, exists),
-      '==> file1 <==\nthis \n\n==> file2 <==\nthis ',
+      '==> file1 <==\n1elif\n\n==> file2 <==\n2elif',
     );
   });
 
