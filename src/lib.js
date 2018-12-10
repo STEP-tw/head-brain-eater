@@ -69,6 +69,12 @@ const filter = function (option, count, files, type = 'head') {
     if (!file.exists) {
       return type + ': ' + file.name + ': No such file or directory';
     }
+
+    if(type == 'tail'){
+      let reversedFile = reverseLines(file);
+      return reversedFile.content;
+    }
+
     return file.content;
   }
   return filteredFiles.map(displayFile.bind(null, type)).join('\n\n');
@@ -81,6 +87,11 @@ const displayFile = function (type, {
 }) {
   if (!exists) {
     return type + ': ' + name + ': No such file or directory';
+  }
+
+  if(type == 'tail'){
+    let reversedFile = reverseLines({name,content,exists});
+    content = reversedFile.content;
   }
   return '==> ' + name + ' <==\n' + content;
 };
