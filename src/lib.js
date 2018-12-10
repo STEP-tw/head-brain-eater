@@ -3,7 +3,7 @@ let isOptionProvided = function(arg) {
 };
 
 const classifyParameters = function(parameters) {
-  let filter = 'n';
+  let option = 'n';
   let firstArg = parameters[0];
   let secondArg = parameters[1];
   let firstFileNameIndex = 0;
@@ -13,7 +13,7 @@ const classifyParameters = function(parameters) {
     firstFileNameIndex++;
     count = firstArg.slice(1);
     if (!isNaturalNum(count)) {
-      filter = firstArg[1];
+      option = firstArg[1];
       count = firstArg.slice(2);
       if (firstArg.length == 2) {
         firstFileNameIndex++;
@@ -23,7 +23,7 @@ const classifyParameters = function(parameters) {
   }
   let fileNames = parameters.slice(firstFileNameIndex);
 
-  return {filter, count, fileNames};
+  return {option, count, fileNames};
 };
 
 const cut = function(seperator, count, content) {
@@ -33,7 +33,7 @@ const cut = function(seperator, count, content) {
     .join(seperator);
 };
 
-const headOptions = function() {
+const options = function() {
   let options = {
     n: cut.bind(null, '\n'),
     c: cut.bind(null, ''),
@@ -52,8 +52,9 @@ const hasOnlyOneEle = function(elements) {
   return elements.length == 1;
 };
 
-const head = function(option, count, files) {
-  let filter = headOptions()[option];
+const filter = function(option, count, files, type = 'head') {
+  let filter = options()[option];
+
   let filteredFiles = files.map(filterContent.bind(null, filter, count));
   if (hasOnlyOneEle(files)) {
     let file = filteredFiles[0];
@@ -62,12 +63,12 @@ const head = function(option, count, files) {
     }
     return file.content;
   }
-  return filteredFiles.map(displayFile).join('\n\n');
+  return filteredFiles.map(displayFile.bind(null, type)).join('\n\n');
 };
 
-const displayFile = function({name, content, exists}) {
+const displayFile = function(type, {name, content, exists}) {
   if (!exists) {
-    return 'head: ' + name + ': No such file or directory';
+    return type + ': ' + name + ': No such file or directory';
   }
   return '==> ' + name + ' <==\n' + content;
 };
@@ -89,25 +90,31 @@ const readFiles = function(readFileSync, fileNames, exists) {
   return fileNames.map(readFile.bind(null, readFileSync, exists));
 };
 
-const validateParameters = function(option, count, fileNames) {
+const validateParameters = function(option, count, type) {
   let types = {n: 'line', c: 'byte'};
   let errorMessage = undefined;
-
+  let usageMessages = {
+    head: 'usage: head [-n lines | -c bytes] [file ...]',
+    tail: 'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]',
+  };
   if (!isValidOption(option)) {
     errorMessage =
-      'head: illegal option -- ' +
-      option +
-      '\nusage: head [-n lines | -c bytes] [file ...]';
+      type + ': illegal option -- ' + option + '\n' + usageMessages[type];
     return errorMessage;
   }
   if (isUndefined(count)) {
     errorMessage =
-      'head: option requires an argument -- ' +
+      type +
+      ': option requires an argument -- ' +
       option +
-      '\nusage: head [-n lines | -c bytes] [file ...]';
+      '\n' +
+      usageMessages[type];
     return errorMessage;
   }
   if (!isNaturalNum(count)) {
+    if (type == 'tail') {
+      return '';
+    }
     errorMessage = 'head: illegal ' + types[option] + ' count -- ' + count;
     return errorMessage;
   }
@@ -125,24 +132,50 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
-const runHead = function(parameters, readFileSync, existsSync) {
-  let {filter, count, fileNames} = classifyParameters(parameters);
-  let errorMessage = validateParameters(filter, count, fileNames);
+const head = function(parameters, readFileSync, existsSync) {
+  let {option, count, fileNames} = classifyParameters(parameters);
+
+  let errorMessage = validateParameters(option, count, 'head');
   if (errorMessage != undefined) {
     return errorMessage;
   }
   let files = readFiles(readFileSync, fileNames, existsSync);
-  return head(filter, count, files);
+  return filter(option, count, files);
+};
+
+const reverse = function(file) {
+  let content = file.content
+    .split('\n')
+    .reverse()
+    .join('\n');
+  let {name, exists} = file;
+  return {name, content, exists};
+};
+
+const tail = function(parameters, readFileSync, existsSync) {
+  let {option, count, fileNames} = classifyParameters(parameters);
+  let errorMessage = validateParameters(option, count, 'tail');
+
+  if (errorMessage != undefined) {
+    return errorMessage;
+  }
+
+  let files = readFiles(readFileSync, fileNames, existsSync);
+
+  let reversedFiles = files.map(reverse);
+
+  return filter(option, count, reversedFiles, 'tail');
 };
 
 module.exports = {
-  head,
-  headOptions,
+  filter,
+  options,
   cut,
   readFiles,
   displayFile,
   validateParameters,
-  runHead,
+  head,
   classifyParameters,
   readFiles,
+  tail,
 };
