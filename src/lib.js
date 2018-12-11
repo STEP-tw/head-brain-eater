@@ -180,28 +180,15 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
-const head = function(parameters, readFileSync, existsSync) {
+const runFilter = function(parameters, type , readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
-  let errorMessage = validateParameters(option, count, "head");
+  let errorMessage = validateParameters(option, count, type);
   if (errorMessage != undefined) {
     return errorMessage;
   }
   let files = readFiles(readFileSync, fileNames, existsSync);
-  return filter(option, count, files);
-};
-
-const tail = function(parameters, readFileSync, existsSync) {
-  let { option, count, fileNames } = classifyParameters(parameters);
-  let errorMessage = validateParameters(option, count, "tail");
-
-  if (errorMessage != undefined) {
-    return errorMessage;
-  }
-
-  let files = readFiles(readFileSync, fileNames, existsSync);
-
-  return filter(option, count, files, "tail");
+  return filter(option, count, files,type);
 };
 
 module.exports = {
@@ -211,8 +198,8 @@ module.exports = {
   readFiles,
   displayFile,
   validateParameters,
-  head,
+  runFilter,
   classifyParameters,
   readFiles,
-  tail
+  
 };

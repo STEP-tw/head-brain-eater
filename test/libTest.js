@@ -1,14 +1,13 @@
 let deepEqual = require("assert").deepEqual;
 let {
   displayFile,
-  head,
   readFiles,
   options,
   cut,
   classifyParameters,
   validateParameters,
   filter,
-  tail
+  runFilter
 } = require("../src/lib.js");
 
 const readLine = function(name) {
@@ -263,31 +262,31 @@ describe("readFiles", function() {
   });
 });
 
-describe("head", function() {
+describe("runFilter", function() {
   it("should return head result of given file when valid parameters and files are given", function() {
-    deepEqual(head(["-n5", "file1"], readLine, exists), "this is file1");
-    deepEqual(head(["-c5", "file1"], readLine, exists), "this ");
+    deepEqual(runFilter(["-n5", "file1"], 'head' ,readLine, exists), "this is file1");
+    deepEqual(runFilter(["-c5", "file1"], 'head' ,readLine, exists), "this ");
     deepEqual(
-      head(["-c5", "file1", "file2"], readLine, exists),
+      runFilter(["-c5", "file1", "file2"], 'head', readLine, exists),
       "==> file1 <==\nthis \n\n==> file2 <==\nthis "
     );
   });
 
   it("should return error message when invalid parameters are given", function() {
     deepEqual(
-      head(["-n", 0, "file"], readLine, exists),
+      runFilter(["-n", 0, "file"], 'head', readLine, exists),
       "head: illegal line count -- 0"
     );
     deepEqual(
-      head(["-c", "file1", "file"], readLine, exists),
+      runFilter(["-c", "file1", "file"],'head' ,readLine, exists),
       "head: illegal byte count -- file1"
     );
     deepEqual(
-      head(["-c", undefined, "file"], readLine, exists),
+      runFilter(["-c", undefined, "file"], 'head' ,readLine, exists),
       "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
     );
     deepEqual(
-      head(["-e", 0, "file"], readLine, exists),
+      runFilter(["-e", 0, "file"], 'head', readLine, exists),
       "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
     );
   });
@@ -295,26 +294,26 @@ describe("head", function() {
 
 describe("tail", function() {
   it("should return tail result of given file when valid parameters and files are given", function() {
-    deepEqual(tail(["-n5", "file1"], readLine, exists), "this is file1");
-    deepEqual(tail(["-c5", "file1"], readLine, exists), "file1");
+    deepEqual(runFilter(["-n5", "file1"], 'tail' ,readLine, exists), "this is file1");
+    deepEqual(runFilter(["-c5", "file1"], 'tail' , readLine, exists), "file1");
     deepEqual(
-      tail(["-c5", "file1", "file2"], readLine, exists),
+      runFilter(["-c5", "file1", "file2"], 'tail' ,readLine, exists),
       "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
     );
   });
 
   it("should return error message when invalid parameters are given", function() {
-    deepEqual(tail(["-n", 0, "file"], readLine, exists), "");
+    deepEqual(runFilter(["-n", 0, "file"], 'tail' ,readLine, exists), "");
     deepEqual(
-      tail(["-c", "file1", "file"], readLine, exists),
+      runFilter(["-c", "file1", "file"],'tail', readLine, exists),
       "tail: illegal offset -- file1"
     );
     deepEqual(
-      tail(["-c", undefined, "file"], readLine, exists),
+      runFilter(["-c", undefined, "file"], 'tail' ,readLine, exists),
       "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
     deepEqual(
-      tail(["-e", 0, "file"], readLine, exists),
+      runFilter(["-e", 0, "file"], 'tail' ,readLine, exists),
       "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
   });
