@@ -2,6 +2,9 @@ let isOptionProvided = function(arg) {
   return arg.startsWith("-");
 };
 
+const toWholeNumber = function(num){
+  return Math.max(0,num);
+}
 const classifyParameters = function(parameters) {
   let option = "n";
   let firstArg = parameters[0];
@@ -37,9 +40,10 @@ const cut = function(seperator, count, content, isReverse) {
   if (isReverse == true) {
     let contentLength = content.split(seperator).length;
     start = contentLength - count;
+    start = toWholeNumber(start);
     end = contentLength;
   }
-
+  
   return content
     .split(seperator)
     .slice(start, end)
