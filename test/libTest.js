@@ -87,9 +87,14 @@ describe("filter", function() {
 });
 
 describe("cut", function() {
-  it("should cut the given text by given seperator and return specified no of portions", function() {
-    deepEqual(cut("-", 3, "1-2-3-4-5"), "1-2-3");
-    deepEqual(cut("\n", 0, "1\n2\n3"), "");
+  it("should return sliced text of the given text by given seperator and return specified no of portions", function() {
+    deepEqual(cut("-", 3, "1-2-3-4-5",false), "1-2-3");
+    deepEqual(cut("\n", 0, "1\n2\n3",false), "");
+  });
+
+  it('should return sliced text sliced from reverse order when last argument given as true', function() {
+    deepEqual(cut("-", 3, "1-2-3-4-5",true), "3-4-5");
+    deepEqual(cut("\n", 1, "1\n2\n3",true), "3");
   });
 });
 
