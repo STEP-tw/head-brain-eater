@@ -119,6 +119,7 @@ const readFile = function(readFileSync, doesFileExist, fileName) {
     };
   }
   content = readFileSync(fileName, "utf-8");
+  content = content.trim();
   return {
     content,
     name,
