@@ -2,9 +2,10 @@ let isOptionProvided = function(arg) {
   return arg.startsWith("-");
 };
 
-const toWholeNumber = function(num){
-  return Math.max(0,num);
-}
+const toWholeNumber = function(num) {
+  return Math.max(0, num);
+};
+
 const classifyParameters = function(parameters) {
   let option = "n";
   let firstArg = parameters[0];
@@ -43,7 +44,7 @@ const cut = function(seperator, count, content, isReverse) {
     start = toWholeNumber(start);
     end = contentLength;
   }
-  
+
   return content
     .split(seperator)
     .slice(start, end)
@@ -82,13 +83,6 @@ const filter = function(option, count, files, type = "head") {
   let filteredFiles = files.map(
     filterContent.bind(null, filter, count, isReverse)
   );
-
-  // if (type == "tail") {
-  //   filteredFiles = filteredFiles.map(reverseLines);
-  //   if (option == "c") {
-  //     filteredFiles = filteredFiles.map(reverseCharacters);
-  //   }
-  // }
 
   if (hasOnlyOneElement(files)) {
     let file = filteredFiles[0];
@@ -142,14 +136,10 @@ const validateParameters = function(option, count, type) {
   };
   let errorMessage = undefined;
 
-  let usageMessages = {
-    head: "usage: head [-n lines | -c bytes] [file ...]",
-    tail: "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-  };
-
-  let invalidOptionMsg =
-    type + ": illegal option -- " + option + "\n" + usageMessages[type];
-  let undefinedCountMsg = type + ": option requires an argument -- " + option;
+  let { invalidOptionMsg, undefinedCountMsg, usageMessages } = errorMessages(
+    type,
+    option
+  );
 
   if (!isValidOption(option)) {
     errorMessage = invalidOptionMsg;
@@ -185,7 +175,9 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
-const runFilter = function(parameters, type , readFileSync, existsSync) {
+
+
+const runFilter = function(parameters, type, readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
   let errorMessage = validateParameters(option, count, type);
@@ -193,7 +185,20 @@ const runFilter = function(parameters, type , readFileSync, existsSync) {
     return errorMessage;
   }
   let files = readFiles(readFileSync, fileNames, existsSync);
-  return filter(option, count, files,type);
+  return filter(option, count, files, type);
+};
+
+
+
+const errorMessages = function(type, option) {
+  let usageMessages = {
+    head: "usage: head [-n lines | -c bytes] [file ...]",
+    tail: "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+  };
+  let invalidOptionMsg =
+    type + ": illegal option -- " + option + "\n" + usageMessages[type];
+  let undefinedCountMsg = type + ": option requires an argument -- " + option;
+  return { invalidOptionMsg, undefinedCountMsg, usageMessages };
 };
 
 module.exports = {
@@ -205,6 +210,5 @@ module.exports = {
   validateParameters,
   runFilter,
   classifyParameters,
-  readFiles,
-  
+  readFiles
 };
