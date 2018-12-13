@@ -298,49 +298,66 @@ describe("runFilter", function() {
   });
 
   describe("tail", function() {
-    it("should return tail result of given file when valid parameters and files are given", function() {
+    it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
       deepEqual(
         runFilter(["-n5", "file1"], "tail", readLine, exists),
         "this is file1"
       );
+    });
+
+    it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
       deepEqual(runFilter(["-c5", "file1"], "tail", readLine, exists), "file1");
       deepEqual(
         runFilter(["-c5", "file1", "file2"], "tail", readLine, exists),
         "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
       );
     });
+  });
 
-    it("should return error message when invalid parameters are given", function() {
-      deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
-      deepEqual(
-        runFilter(["-c", "file1", "file"], "tail", readLine, exists),
-        "tail: illegal offset -- file1"
-      );
-      deepEqual(
-        runFilter(["-c", undefined, "file"], "tail", readLine, exists),
-        "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-      );
-      deepEqual(
-        runFilter(["-e", 0, "file"], "tail", readLine, exists),
-        "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-      );
-    });
+  it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
+    deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
+    deepEqual(
+      runFilter(["-c", "file1", "file"], "tail", readLine, exists),
+      "tail: illegal offset -- file1"
+    );
+    deepEqual(
+      runFilter(["-c", undefined, "file"], "tail", readLine, exists),
+      "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    );
+    deepEqual(
+      runFilter(["-e", 0, "file"], "tail", readLine, exists),
+      "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    );
   });
 });
 
-describe('errorMessages', function() {
-
-  it('should return error message for respective error for head', function() {
-    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages('head','n');
-    deepEqual(invalidOptionMsg,'head: illegal option -- n\nusage: head [-n lines | -c bytes] [file ...]');
-    deepEqual(undefinedCountMsg,'head: option requires an argument -- n');
-    deepEqual(usageMessage,'usage: head [-n lines | -c bytes] [file ...]');
+describe("errorMessages", function() {
+  it("should return error message for respective error for head", function() {
+    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
+      "head",
+      "n"
+    );
+    deepEqual(
+      invalidOptionMsg,
+      "head: illegal option -- n\nusage: head [-n lines | -c bytes] [file ...]"
+    );
+    deepEqual(undefinedCountMsg, "head: option requires an argument -- n");
+    deepEqual(usageMessage, "usage: head [-n lines | -c bytes] [file ...]");
   });
 
-it('should return error message for respective error for head', function() {
-    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages('tail','n');
-    deepEqual(invalidOptionMsg,'tail: illegal option -- n\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]');
-    deepEqual(undefinedCountMsg,'tail: option requires an argument -- n');
-    deepEqual(usageMessage,'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]');
+  it("should return error message for respective error for head", function() {
+    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
+      "tail",
+      "n"
+    );
+    deepEqual(
+      invalidOptionMsg,
+      "tail: illegal option -- n\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    );
+    deepEqual(undefinedCountMsg, "tail: option requires an argument -- n");
+    deepEqual(
+      usageMessage,
+      "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    );
   });
 });
