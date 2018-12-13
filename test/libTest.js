@@ -1,9 +1,11 @@
 let deepEqual = require("assert").deepEqual;
 let {
   displayFile,
+  readFile,
   readFiles,
   options,
   cut,
+  filterContent,
   classifyParameters,
   validateParameters,
   filter,
@@ -107,12 +109,15 @@ describe("classifyParameters", function() {
     ]);
   });
 
-  it("should return an object with  option,count and files ", function() {
+  it("should return an object with  default option and count with given file when niether options nor count are specified ", function() {
     deepEqual(classifyParameters(["file1"]), {
       option: "n",
       count: 10,
       fileNames: ["file1"]
     });
+  });
+
+  it("should return an object with given option,count and file when option is specified ", function() {
     deepEqual(classifyParameters(["-n5", "file1"]), {
       option: "n",
       count: 5,
@@ -123,16 +128,25 @@ describe("classifyParameters", function() {
       count: 5,
       fileNames: ["file1"]
     });
+  });
+
+  it("should return an object with  default option and given count and file when no option but count is given is specified ", function() {
     deepEqual(classifyParameters(["-5", "file1"]), {
       option: "n",
       count: 5,
       fileNames: ["file1"]
     });
+  });
+
+  it("should return an object with  default option and count with given  files when niether options nor count are specified ", function() {
     deepEqual(classifyParameters(["file1", "file2"]), {
       option: "n",
       count: 10,
       fileNames: ["file1", "file2"]
     });
+  });
+
+  it("should return an object with option,count and files when option is specified ", function() {
     deepEqual(classifyParameters(["-n", "5", "file1", "file2"]), {
       option: "n",
       count: 5,
@@ -143,11 +157,17 @@ describe("classifyParameters", function() {
       count: 5,
       fileNames: ["file1", "file2"]
     });
+  });
+
+  it("should return an object with  default option and given count and files when no option but count is given is specified ", function() {
     deepEqual(classifyParameters(["-5", "file1", "file2"]), {
       option: "n",
       count: 5,
       fileNames: ["file1", "file2"]
     });
+  });
+
+  it("should return and object with option c and given count and file if c is given as option in input ", function() {
     deepEqual(classifyParameters(["-c5", "file1"]), {
       option: "c",
       count: 5,
@@ -158,6 +178,9 @@ describe("classifyParameters", function() {
       count: 5,
       fileNames: ["file1"]
     });
+  });
+
+  it("should return and object with option c and given count and files if c is given as option in input ", function() {
     deepEqual(classifyParameters(["-c5", "file1", "file2"]), {
       option: "c",
       count: 5,
@@ -242,22 +265,42 @@ describe("validateParameters", function() {
 });
 
 describe("readFiles", function() {
-  it("should return content,exists and exists in object of file when fileName with file reader and exists given", function() {
-    deepEqual(readFiles(readLine, ["file1"], exists), [
+  it("should return array of objects with content,exists and name of files when fileNames with file reader and exists given", function() {
+    deepEqual(readFiles(readLine, ["file1", "file2"], exists), [
       {
         content: "this is file1",
         exists: true,
         name: "file1"
+      },
+      {
+        content: "this is file2",
+        exists: true,
+        name: "file2"
       }
     ]);
   });
 
-  it("should return object with name,empty content and exists key false when non existing file name is given", function() {
+  it("should return array of objects with name,empty content and exists key false when non existing file names is given", function() {
     deepEqual(readFiles(readLine, ["file3"], exists), [
       {
         content: "",
         exists: false,
         name: "file3"
+      }
+    ]);
+  });
+
+  it("should return object with name,empty content and exists key false and file objects  when non existing file name and existing file names are given", function() {
+    deepEqual(readFiles(readLine, ["file3", "file1"], exists), [
+      {
+        content: "",
+        exists: false,
+        name: "file3"
+      },
+      {
+        content: "this is file1",
+        name: "file1",
+        exists: true
       }
     ]);
   });
@@ -277,7 +320,7 @@ describe("runFilter", function() {
       );
     });
 
-    it("should return error message when invalid parameters are given", function() {
+    it("should return illegal count/byte count is not valid value are given", function() {
       deepEqual(
         runFilter(["-n", 0, "file"], "head", readLine, exists),
         "head: illegal line count -- 0"
@@ -286,10 +329,15 @@ describe("runFilter", function() {
         runFilter(["-c", "file1", "file"], "head", readLine, exists),
         "head: illegal byte count -- file1"
       );
+    });
+
+    it("should return option requires argument message when undefined count is given are given", function() {
       deepEqual(
         runFilter(["-c", undefined, "file"], "head", readLine, exists),
         "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
       );
+    });
+    it("should return option is neither n or c are given", function() {
       deepEqual(
         runFilter(["-e", 0, "file"], "head", readLine, exists),
         "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
@@ -312,18 +360,24 @@ describe("runFilter", function() {
         "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
       );
     });
+
+    it("should return illegal count/byte count is not valid value are given", function() {
+      deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
+      deepEqual(
+        runFilter(["-c", "file1", "file"], "tail", readLine, exists),
+        "tail: illegal offset -- file1"
+      );
+    });
+
+    it("should return option requires argument message when undefined count is given are given", function() {
+      deepEqual(
+        runFilter(["-c", undefined, "file"], "tail", readLine, exists),
+        "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+      );
+    });
   });
 
-  it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-    deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
-    deepEqual(
-      runFilter(["-c", "file1", "file"], "tail", readLine, exists),
-      "tail: illegal offset -- file1"
-    );
-    deepEqual(
-      runFilter(["-c", undefined, "file"], "tail", readLine, exists),
-      "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-    );
+  it("should return option is neither n or c are given", function() {
     deepEqual(
       runFilter(["-e", 0, "file"], "tail", readLine, exists),
       "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
@@ -358,6 +412,37 @@ describe("errorMessages", function() {
     deepEqual(
       usageMessage,
       "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    );
+  });
+});
+
+describe("readFile", function() {
+  it("should return file object with exists , content and name when file name with reader and exist checker is given", function() {
+    deepEqual(readFile(readLine, exists, "file1"), {
+      content: "this is file1",
+      name: "file1",
+      exists: true
+    });
+  });
+
+  it("should return array of objects with name,empty content and exists key false when non existing file names is given", function() {
+    deepEqual(readFile(readLine, exists, "file3"), {
+      name: "file3",
+      content: "",
+      exists: false
+    });
+  });
+});
+
+describe("filterContent", function() {
+  it("should return the output of given filter with other parameters count file as parameters to filter", function() {
+    deepEqual(
+      filterContent((x, y, z) => y, 3, true, {
+        name: "tilak",
+        content: "tilakpuli",
+        exists: false
+      }),
+      { name: "tilak", content: "tilakpuli", exists: false }
     );
   });
 });

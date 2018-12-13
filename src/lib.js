@@ -211,6 +211,7 @@ module.exports = {
   validateParameters,
   runFilter,
   classifyParameters,
-  readFiles,
+  readFile,
+  filterContent,
   errorMessages
 };
