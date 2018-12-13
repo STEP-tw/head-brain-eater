@@ -130,13 +130,13 @@ const readFiles = function(readFileSync, fileNames, exists) {
 };
 
 const validateParameters = function(option, count, type) {
-  let types = {
+  let optionNames = {
     n: "line",
     c: "byte"
   };
   let errorMessage = undefined;
 
-  let { invalidOptionMsg, undefinedCountMsg, usageMessages } = errorMessages(
+  let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
     type,
     option
   );
@@ -147,7 +147,7 @@ const validateParameters = function(option, count, type) {
   }
 
   if (isUndefined(count)) {
-    errorMessage = undefinedCountMsg + "\n" + usageMessages[type];
+    errorMessage = undefinedCountMsg + "\n" + usageMessage;
     return errorMessage;
   }
 
@@ -158,7 +158,7 @@ const validateParameters = function(option, count, type) {
       }
       return "tail: illegal offset -- " + count;
     }
-    errorMessage = "head: illegal " + types[option] + " count -- " + count;
+    errorMessage = "head: illegal " + optionNames[option] + " count -- " + count;
     return errorMessage;
   }
 };
@@ -198,7 +198,8 @@ const errorMessages = function(type, option) {
   let invalidOptionMsg =
     type + ": illegal option -- " + option + "\n" + usageMessages[type];
   let undefinedCountMsg = type + ": option requires an argument -- " + option;
-  return { invalidOptionMsg, undefinedCountMsg, usageMessages };
+  let usageMessage = usageMessages[type];
+  return { invalidOptionMsg, undefinedCountMsg, usageMessage };
 };
 
 module.exports = {
@@ -210,5 +211,6 @@ module.exports = {
   validateParameters,
   runFilter,
   classifyParameters,
-  readFiles
+  readFiles,
+  errorMessages
 };

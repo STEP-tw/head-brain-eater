@@ -7,7 +7,8 @@ let {
   classifyParameters,
   validateParameters,
   filter,
-  runFilter
+  runFilter,
+  errorMessages
 } = require("../src/lib.js");
 
 const readLine = function(name) {
@@ -87,13 +88,13 @@ describe("filter", function() {
 
 describe("cut", function() {
   it("should return sliced text of the given text by given seperator and return specified no of portions", function() {
-    deepEqual(cut("-", 3, "1-2-3-4-5",false), "1-2-3");
-    deepEqual(cut("\n", 0, "1\n2\n3",false), "");
+    deepEqual(cut("-", 3, "1-2-3-4-5", false), "1-2-3");
+    deepEqual(cut("\n", 0, "1\n2\n3", false), "");
   });
 
-  it('should return sliced text sliced from reverse order when last argument given as true', function() {
-    deepEqual(cut("-", 3, "1-2-3-4-5",true), "3-4-5");
-    deepEqual(cut("\n", 1, "1\n2\n3",true), "3");
+  it("should return sliced text sliced from reverse order when last argument given as true", function() {
+    deepEqual(cut("-", 3, "1-2-3-4-5", true), "3-4-5");
+    deepEqual(cut("\n", 1, "1\n2\n3", true), "3");
   });
 });
 
@@ -263,58 +264,83 @@ describe("readFiles", function() {
 });
 
 describe("runFilter", function() {
-  it("should return head result of given file when valid parameters and files are given", function() {
-    deepEqual(runFilter(["-n5", "file1"], 'head' ,readLine, exists), "this is file1");
-    deepEqual(runFilter(["-c5", "file1"], 'head' ,readLine, exists), "this ");
-    deepEqual(
-      runFilter(["-c5", "file1", "file2"], 'head', readLine, exists),
-      "==> file1 <==\nthis \n\n==> file2 <==\nthis "
-    );
+  describe("head", function() {
+    it("should return head result of given file when valid parameters and files are given", function() {
+      deepEqual(
+        runFilter(["-n5", "file1"], "head", readLine, exists),
+        "this is file1"
+      );
+      deepEqual(runFilter(["-c5", "file1"], "head", readLine, exists), "this ");
+      deepEqual(
+        runFilter(["-c5", "file1", "file2"], "head", readLine, exists),
+        "==> file1 <==\nthis \n\n==> file2 <==\nthis "
+      );
+    });
+
+    it("should return error message when invalid parameters are given", function() {
+      deepEqual(
+        runFilter(["-n", 0, "file"], "head", readLine, exists),
+        "head: illegal line count -- 0"
+      );
+      deepEqual(
+        runFilter(["-c", "file1", "file"], "head", readLine, exists),
+        "head: illegal byte count -- file1"
+      );
+      deepEqual(
+        runFilter(["-c", undefined, "file"], "head", readLine, exists),
+        "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
+      );
+      deepEqual(
+        runFilter(["-e", 0, "file"], "head", readLine, exists),
+        "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
+      );
+    });
   });
 
-  it("should return error message when invalid parameters are given", function() {
-    deepEqual(
-      runFilter(["-n", 0, "file"], 'head', readLine, exists),
-      "head: illegal line count -- 0"
-    );
-    deepEqual(
-      runFilter(["-c", "file1", "file"],'head' ,readLine, exists),
-      "head: illegal byte count -- file1"
-    );
-    deepEqual(
-      runFilter(["-c", undefined, "file"], 'head' ,readLine, exists),
-      "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
-    );
-    deepEqual(
-      runFilter(["-e", 0, "file"], 'head', readLine, exists),
-      "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
-    );
+  describe("tail", function() {
+    it("should return tail result of given file when valid parameters and files are given", function() {
+      deepEqual(
+        runFilter(["-n5", "file1"], "tail", readLine, exists),
+        "this is file1"
+      );
+      deepEqual(runFilter(["-c5", "file1"], "tail", readLine, exists), "file1");
+      deepEqual(
+        runFilter(["-c5", "file1", "file2"], "tail", readLine, exists),
+        "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
+      );
+    });
+
+    it("should return error message when invalid parameters are given", function() {
+      deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
+      deepEqual(
+        runFilter(["-c", "file1", "file"], "tail", readLine, exists),
+        "tail: illegal offset -- file1"
+      );
+      deepEqual(
+        runFilter(["-c", undefined, "file"], "tail", readLine, exists),
+        "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+      );
+      deepEqual(
+        runFilter(["-e", 0, "file"], "tail", readLine, exists),
+        "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+      );
+    });
   });
 });
 
-describe("tail", function() {
-  it("should return tail result of given file when valid parameters and files are given", function() {
-    deepEqual(runFilter(["-n5", "file1"], 'tail' ,readLine, exists), "this is file1");
-    deepEqual(runFilter(["-c5", "file1"], 'tail' , readLine, exists), "file1");
-    deepEqual(
-      runFilter(["-c5", "file1", "file2"], 'tail' ,readLine, exists),
-      "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
-    );
+describe('errorMessages', function() {
+
+  it('should return error message for respective error for head', function() {
+    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages('head','n');
+    deepEqual(invalidOptionMsg,'head: illegal option -- n\nusage: head [-n lines | -c bytes] [file ...]');
+    deepEqual(undefinedCountMsg,'head: option requires an argument -- n');
+    deepEqual(usageMessage,'usage: head [-n lines | -c bytes] [file ...]');
   });
 
-  it("should return error message when invalid parameters are given", function() {
-    deepEqual(runFilter(["-n", 0, "file"], 'tail' ,readLine, exists), "");
-    deepEqual(
-      runFilter(["-c", "file1", "file"],'tail', readLine, exists),
-      "tail: illegal offset -- file1"
-    );
-    deepEqual(
-      runFilter(["-c", undefined, "file"], 'tail' ,readLine, exists),
-      "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-    );
-    deepEqual(
-      runFilter(["-e", 0, "file"], 'tail' ,readLine, exists),
-      "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-    );
+it('should return error message for respective error for head', function() {
+    let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages('tail','n');
+    deepEqual(invalidOptionMsg,'tail: illegal option -- n\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]');
+    deepEqual(undefinedCountMsg,'tail: option requires an argument -- n');
+    deepEqual(usageMessage,'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]');
   });
 });
