@@ -152,16 +152,21 @@ const validateParameters = function(option, count, type) {
   }
 
   if (!isNaturalNum(count)) {
-    if (type == "tail") {
-      if (count == 0) {
-        return "";
-      }
-      return "tail: illegal offset -- " + count;
-    }
-    errorMessage = "head: illegal " + optionNames[option] + " count -- " + count;
-    return errorMessage;
+    return illegalCountMessage(count,type,optionNames[option]);
   }
 };
+
+
+const illegalCountMessage = function(count , type ,optionName){
+  if (type == "tail") {
+    if (count == 0) {
+      return "";
+    }
+    return "tail: illegal offset -- " + count;
+  }
+  errorMessage = "head: illegal " + optionName + " count -- " + count;
+  return errorMessage;
+}
 
 const isValidOption = function(option) {
   return option == "n" || option == "c";
@@ -213,5 +218,6 @@ module.exports = {
   classifyParameters,
   readFile,
   filterContent,
-  errorMessages
+  errorMessages,
+  illegalCountMessage
 };

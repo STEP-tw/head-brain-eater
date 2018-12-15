@@ -10,7 +10,8 @@ let {
   validateParameters,
   filter,
   runFilter,
-  errorMessages
+  errorMessages,
+  illegalCountMessage
 } = require("../src/lib.js");
 
 const readLine = function(name) {
@@ -443,6 +444,35 @@ describe("filterContent", function() {
         exists: false
       }),
       { name: "tilak", content: "tilakpuli", exists: false }
+    );
+  });
+});
+
+describe("illegalCountMessage", function() {
+  it("should return empty string when count is 0 and type is tail", function() {
+    deepEqual(illegalCountMessage(0, "tail", "line"), "");
+  });
+
+  it("should return illegal offset message when type is tail and count is not a zero", function() {
+    deepEqual(
+      illegalCountMessage(-5, "tail", "line"),
+      "tail: illegal offset -- -5"
+    );
+    deepEqual(
+      illegalCountMessage("tilak", "tail", "line"),
+      "tail: illegal offset -- tilak"
+    );
+  });
+
+  it("should return illegal count message when type is head and count is not a natural number", function() {
+    deepEqual(
+      illegalCountMessage(-1, "head", "line"),
+      'head: illegal line count -- -1'
+    );
+
+    deepEqual(
+      illegalCountMessage('tilak', "head", "line"),
+      'head: illegal line count -- tilak'
     );
   });
 });
