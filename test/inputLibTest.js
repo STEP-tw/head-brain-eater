@@ -216,8 +216,8 @@ describe("validateParameters", function() {
   });
 
   it("should return undefined when 1st parameter is n or c and 2nd parameter is a natural number", function() {
-    deepEqual(validateParameters("c", 1, "head"), undefined);
-    deepEqual(validateParameters("n", 33, "head"), undefined);
+    deepEqual(validateParameters("c", 1, "head"), null);
+    deepEqual(validateParameters("n", 33, "head"), null);
   });
 });
 

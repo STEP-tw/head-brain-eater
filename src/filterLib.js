@@ -4,7 +4,7 @@ const {
   validateParameters,
   classifyParameters
 } = require("./inputLib");
-const { displayFile } = require("./outputLib");
+const { parseOutput } = require("./outputLib");
 
 const filters = function() {
   return {
@@ -46,14 +46,14 @@ const filter = function(option, count, files, type = "head") {
     return file.content;
   }
 
-  return filteredFiles.map(displayFile.bind(null, type)).join("\n\n");
+  return filteredFiles.map(parseOutput.bind(null, type)).join("\n\n");
 };
 
 const runFilter = function(parameters, type, readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
   let errorMessage = validateParameters(option, count, type);
-  if (errorMessage != undefined) {
+  if (errorMessage != null) {
     return errorMessage;
   }
   let files = readFiles(fileNames, readFileSync, existsSync);

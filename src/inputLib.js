@@ -54,7 +54,7 @@ const validateParameters = function(option, count, type) {
     n: "line",
     c: "byte"
   };
-  let errorMessage = undefined;
+  let errorMessage = null;
 
   let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
     type,
@@ -95,8 +95,8 @@ const isValidOption = function(option) {
   return option == "n" || option == "c";
 };
 
-const isUndefined = function(ele) {
-  return ele == undefined;
+const isUndefined = function(element) {
+  return element == undefined;
 };
 
 const isNaturalNum = function(num) {
