@@ -1,5 +1,5 @@
 const { readFileSync, existsSync } = require("fs");
-const { runFilter } = require("./src/lib");
+const { runFilter } = require("./src/filterLib");
 
 const main = function() {
   console.log(

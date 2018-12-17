@@ -1,4 +1,4 @@
-let { runFilter } = require("./src/lib.js");
+let { runFilter } = require("./src/filterLib.js");
 
 let { readFileSync, existsSync } = require("fs");
 
