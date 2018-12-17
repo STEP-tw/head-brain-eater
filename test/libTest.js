@@ -1,11 +1,8 @@
-let deepEqual = require("assert").deepEqual;
+const deepEqual = require("assert").deepEqual;
 let {
   displayFile,
   readFile,
   readFiles,
-  take,
-  last,
-  cut,
   filterContent,
   classifyParameters,
   validateParameters,
@@ -65,28 +62,6 @@ describe("filter", function() {
       }
     ];
     deepEqual(filter("c", 5, files), "head: file1: No such file or directory");
-  });
-});
-
-describe("cut", function() {
-  it("should return sliced text when text,seperator,start and end is  specified", function() {
-    deepEqual(cut("1-2-3-4-5", "-", 0, 3), "1-2-3");
-  });
-
-  it("should return sliced text from given position when end is not specified", function() {
-    deepEqual(cut("1\n2\n3\n4\n5", "\n", 3), "4\n5");
-  });
-});
-
-describe("take", function() {
-  it("should return specified number of portions from start of given string", function() {
-    deepEqual(take("-", 3, "1-2-3-4-5"), "1-2-3");
-  });
-});
-
-describe("last", function() {
-  it("should return specified number of portions from end of given string", function() {
-    deepEqual(last("-", 3, "1-2-3-4-5"), "3-4-5");
   });
 });
 

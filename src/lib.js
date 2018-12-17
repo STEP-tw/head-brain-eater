@@ -1,3 +1,4 @@
+const { last, take } = require("./stringLib");
 let isOptionProvided = function(arg) {
   return arg.startsWith("-");
 };
@@ -32,21 +33,6 @@ const classifyParameters = function(parameters) {
     count,
     fileNames
   };
-};
-
-const cut = function(string, seperator, start, end) {
-  return string
-    .split(seperator)
-    .slice(start, end)
-    .join(seperator);
-};
-
-const take = function(seperator, count, string) {
-  return cut(string, seperator, 0, count);
-};
-
-const last = function(seperator, count, string) {
-  return cut(string, seperator, -count);
 };
 
 const filters = function() {
@@ -201,7 +187,6 @@ const errorMessages = function(type, option) {
 module.exports = {
   filter,
   filters,
-  cut,
   readFiles,
   displayFile,
   validateParameters,
@@ -210,7 +195,5 @@ module.exports = {
   readFile,
   filterContent,
   errorMessages,
-  take,
-  last,
   illegalCountMessage
 };
