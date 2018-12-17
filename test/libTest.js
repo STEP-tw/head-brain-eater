@@ -229,9 +229,27 @@ describe("validateParameters", function() {
   });
 });
 
+describe("readFile", function() {
+  it("should return file object with exists , content and name when file name with reader and exist checker is given", function() {
+    deepEqual(readFile(readLine, exists, "file1"), {
+      content: "this is file1",
+      name: "file1",
+      exists: true
+    });
+  });
+
+  it("should return array of objects with name,empty content and exists key false when non existing file names is given", function() {
+    deepEqual(readFile(readLine, exists, "file3"), {
+      name: "file3",
+      content: "",
+      exists: false
+    });
+  });
+});
+
 describe("readFiles", function() {
   it("should return array of objects with content,exists and name of files when fileNames with file reader and exists given", function() {
-    deepEqual(readFiles(readLine, ["file1", "file2"], exists), [
+    deepEqual(readFiles(["file1", "file2"], readLine, exists), [
       {
         content: "this is file1",
         exists: true,
@@ -246,7 +264,7 @@ describe("readFiles", function() {
   });
 
   it("should return array of objects with name,empty content and exists key false when non existing file names is given", function() {
-    deepEqual(readFiles(readLine, ["file3"], exists), [
+    deepEqual(readFiles(["file3"], readLine, exists), [
       {
         content: "",
         exists: false,
@@ -256,7 +274,7 @@ describe("readFiles", function() {
   });
 
   it("should return object with name,empty content and exists key false and file objects  when non existing file name and existing file names are given", function() {
-    deepEqual(readFiles(readLine, ["file3", "file1"], exists), [
+    deepEqual(readFiles(["file3", "file1"], readLine, exists), [
       {
         content: "",
         exists: false,
@@ -378,24 +396,6 @@ describe("errorMessages", function() {
       usageMessage,
       "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
-  });
-});
-
-describe("readFile", function() {
-  it("should return file object with exists , content and name when file name with reader and exist checker is given", function() {
-    deepEqual(readFile(readLine, exists, "file1"), {
-      content: "this is file1",
-      name: "file1",
-      exists: true
-    });
-  });
-
-  it("should return array of objects with name,empty content and exists key false when non existing file names is given", function() {
-    deepEqual(readFile(readLine, exists, "file3"), {
-      name: "file3",
-      content: "",
-      exists: false
-    });
   });
 });
 

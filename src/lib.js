@@ -86,11 +86,11 @@ const displayFile = function(type, { name, content, exists }) {
   return "==> " + name + " <==\n" + content;
 };
 
-const readFile = function(readFileSync, doesFileExist, fileName) {
+const readFile = function(readFileSync, existsSync, fileName) {
   let exists = true;
   let name = fileName;
   let content = "";
-  if (!doesFileExist(name)) {
+  if (!existsSync(name)) {
     exists = false;
     return {
       name,
@@ -99,7 +99,6 @@ const readFile = function(readFileSync, doesFileExist, fileName) {
     };
   }
   content = readFileSync(fileName, "utf-8");
-  content = content.trim();
   return {
     content,
     name,
@@ -107,8 +106,8 @@ const readFile = function(readFileSync, doesFileExist, fileName) {
   };
 };
 
-const readFiles = function(readFileSync, fileNames, exists) {
-  return fileNames.map(readFile.bind(null, readFileSync, exists));
+const readFiles = function(fileNames, readFileSync, existsSync) {
+  return fileNames.map(readFile.bind(null, readFileSync, existsSync));
 };
 
 const validateParameters = function(option, count, type) {
@@ -168,7 +167,7 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
   if (errorMessage != undefined) {
     return errorMessage;
   }
-  let files = readFiles(readFileSync, fileNames, existsSync);
+  let files = readFiles(fileNames, readFileSync, existsSync);
   return filter(option, count, files, type);
 };
 
