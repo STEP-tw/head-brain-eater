@@ -3,7 +3,8 @@ let {
   displayFile,
   readFile,
   readFiles,
-  filters,
+  take,
+  last,
   cut,
   filterContent,
   classifyParameters,
@@ -68,14 +69,24 @@ describe("filter", function() {
 });
 
 describe("cut", function() {
-  it("should return sliced text of the given text by given seperator and return specified no of portions", function() {
-    deepEqual(cut("-", 3, "1-2-3-4-5", false), "1-2-3");
-    deepEqual(cut("\n", 0, "1\n2\n3", false), "");
+  it("should return sliced text when text,seperator,start and end is  specified", function() {
+    deepEqual(cut("1-2-3-4-5", "-", 0, 3), "1-2-3");
   });
 
-  it("should return sliced text sliced from reverse order when last argument given as true", function() {
-    deepEqual(cut("-", 3, "1-2-3-4-5", true), "3-4-5");
-    deepEqual(cut("\n", 1, "1\n2\n3", true), "3");
+  it("should return sliced text from given position when end is not specified", function() {
+    deepEqual(cut("1\n2\n3\n4\n5", "\n", 3), "4\n5");
+  });
+});
+
+describe("take", function() {
+  it("should return specified number of portions from start of given string", function() {
+    deepEqual(take("-", 3, "1-2-3-4-5"), "1-2-3");
+  });
+});
+
+describe("last", function() {
+  it("should return specified number of portions from end of given string", function() {
+    deepEqual(last("-", 3, "1-2-3-4-5"), "3-4-5");
   });
 });
 
@@ -416,7 +427,7 @@ describe("readFile", function() {
 describe("filterContent", function() {
   it("should return the output of given filter with other parameters count file as parameters to filter", function() {
     deepEqual(
-      filterContent((x, y, z) => y, 3, true, {
+      filterContent((x, y, z) => y, 3, {
         name: "tilak",
         content: "tilakpuli",
         exists: false

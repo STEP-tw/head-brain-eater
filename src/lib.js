@@ -34,33 +34,37 @@ const classifyParameters = function(parameters) {
   };
 };
 
-const cut = function(seperator, count, content, isReverse) {
-  let start = 0;
-  let end = count;
-
-  if (isReverse == true) {
-    let contentLength = content.split(seperator).length;
-    start = contentLength - count;
-    start = toWholeNumber(start);
-    end = contentLength;
-  }
-
-  return content
+const cut = function(string, seperator, start, end) {
+  return string
     .split(seperator)
     .slice(start, end)
     .join(seperator);
 };
 
+const take = function(seperator, count, string) {
+  return cut(string, seperator, 0, count);
+};
+
+const last = function(seperator, count, string) {
+  return cut(string, seperator, -count);
+};
+
 const filters = function() {
   return {
-    n: cut.bind(null, "\n"),
-    c: cut.bind(null, "")
+    tail: {
+      n: last.bind(null, "\n"),
+      c: last.bind(null, "")
+    },
+    head: {
+      n: take.bind(null, "\n"),
+      c: take.bind(null, "")
+    }
   };
 };
 
-const filterContent = function(filter, count, isReverse, file) {
+const filterContent = function(filter, count, file) {
   let name = file.name;
-  let content = filter(count, file.content, isReverse);
+  let content = filter(count, file.content);
   let exists = file.exists;
   return {
     name,
@@ -74,14 +78,8 @@ const hasOnlyOneElement = function(elements) {
 };
 
 const filter = function(option, count, files, type = "head") {
-  let filter = filters()[option];
-  let isReverse = false;
-  if (type == "tail") {
-    isReverse = true;
-  }
-  let filteredFiles = files.map(
-    filterContent.bind(null, filter, count, isReverse)
-  );
+  let filter = filters()[type][option];
+  let filteredFiles = files.map(filterContent.bind(null, filter, count));
 
   if (hasOnlyOneElement(files)) {
     let file = filteredFiles[0];
@@ -212,5 +210,7 @@ module.exports = {
   readFile,
   filterContent,
   errorMessages,
+  take,
+  last,
   illegalCountMessage
 };
