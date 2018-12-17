@@ -1,0 +1,11 @@
+tail.js => remove usage noise.
+tail.js and head.js => instead of sending two different functions send fs.
+lib.js => displayFile function name can be named better.
+lib.js => line no 54 function options is a misleading function name.
+lib.js => line 173 unnecessary abbreviation of element.
+lib.js => runFilter name can be different.
+lib.js => cut function is doing too many things.
+lib.js => rename file and  extract libraries from it.
+libTest.js => option function needs not to be tested.
+libTest.js => equal would be enough for string assertion.
+lib.js => validateParameters returning different types.
