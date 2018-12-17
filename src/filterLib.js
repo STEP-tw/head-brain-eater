@@ -4,6 +4,7 @@ const {
   validateParameters,
   classifyParameters
 } = require("./inputLib");
+const { displayFile } = require("./outputLib");
 
 const filters = function() {
   return {
@@ -48,14 +49,6 @@ const filter = function(option, count, files, type = "head") {
   return filteredFiles.map(displayFile.bind(null, type)).join("\n\n");
 };
 
-const displayFile = function(type, { name, content, exists }) {
-  if (!exists) {
-    return type + ": " + name + ": No such file or directory";
-  }
-
-  return "==> " + name + " <==\n" + content;
-};
-
 const runFilter = function(parameters, type, readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
@@ -70,7 +63,6 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
 module.exports = {
   filter,
   filters,
-  displayFile,
   runFilter,
   filterContent
 };
