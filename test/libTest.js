@@ -3,7 +3,7 @@ let {
   displayFile,
   readFile,
   readFiles,
-  options,
+  filters,
   cut,
   filterContent,
   classifyParameters,
@@ -26,28 +26,6 @@ const exists = function(fileName) {
   return fileName == "file1" || fileName == "file2";
 };
 
-describe("options", function() {
-  it('should return object with keys "n" and "c"', function() {
-    let opts = options();
-    deepEqual(Object.keys(opts), ["n", "c"]);
-  });
-
-  describe("n", function() {
-    let { n } = options();
-    let content = "hi\nhow are you\ni am fine";
-    it("should return first specified number of lines of content", function() {
-      deepEqual(n(2, content), "hi\nhow are you");
-    });
-  });
-
-  describe("c", function() {
-    let { c } = options();
-    it("should return first specified number of characters of content", function() {
-      deepEqual(c(5, "nandi hills"), "nandi");
-    });
-  });
-});
-
 describe("filter", function() {
   let files = [
     {
@@ -60,7 +38,7 @@ describe("filter", function() {
     deepEqual(filter("c", 5, files), "Today");
   });
 
-  it("should return specified number of line  of  the content given when c is passed as parameter ", function() {
+  it("should return specified number of line  of  the content given when n is passed as parameter ", function() {
     deepEqual(filter("n", 2, files), "Today is a great day\nyes");
   });
 
@@ -110,7 +88,7 @@ describe("classifyParameters", function() {
     ]);
   });
 
-  it("should return an object with  default option and count with given file when niether options nor count are specified ", function() {
+  it("should return an object with  default option and count with given file when niether filters nor count are specified ", function() {
     deepEqual(classifyParameters(["file1"]), {
       option: "n",
       count: 10,
@@ -139,7 +117,7 @@ describe("classifyParameters", function() {
     });
   });
 
-  it("should return an object with  default option and count with given  files when niether options nor count are specified ", function() {
+  it("should return an object with  default option and count with given  files when niether filters nor count are specified ", function() {
     deepEqual(classifyParameters(["file1", "file2"]), {
       option: "n",
       count: 10,
@@ -467,12 +445,12 @@ describe("illegalCountMessage", function() {
   it("should return illegal count message when type is head and count is not a natural number", function() {
     deepEqual(
       illegalCountMessage(-1, "head", "line"),
-      'head: illegal line count -- -1'
+      "head: illegal line count -- -1"
     );
 
     deepEqual(
-      illegalCountMessage('tilak', "head", "line"),
-      'head: illegal line count -- tilak'
+      illegalCountMessage("tilak", "head", "line"),
+      "head: illegal line count -- tilak"
     );
   });
 });

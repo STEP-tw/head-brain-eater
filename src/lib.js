@@ -51,12 +51,11 @@ const cut = function(seperator, count, content, isReverse) {
     .join(seperator);
 };
 
-const options = function() {
-  let options = {
+const filters = function() {
+  return {
     n: cut.bind(null, "\n"),
     c: cut.bind(null, "")
   };
-  return options;
 };
 
 const filterContent = function(filter, count, isReverse, file) {
@@ -75,7 +74,7 @@ const hasOnlyOneElement = function(elements) {
 };
 
 const filter = function(option, count, files, type = "head") {
-  let filter = options()[option];
+  let filter = filters()[option];
   let isReverse = false;
   if (type == "tail") {
     isReverse = true;
@@ -89,7 +88,6 @@ const filter = function(option, count, files, type = "head") {
     if (!file.exists) {
       return type + ": " + file.name + ": No such file or directory";
     }
-
     return file.content;
   }
 
@@ -152,12 +150,11 @@ const validateParameters = function(option, count, type) {
   }
 
   if (!isNaturalNum(count)) {
-    return illegalCountMessage(count,type,optionNames[option]);
+    return illegalCountMessage(count, type, optionNames[option]);
   }
 };
 
-
-const illegalCountMessage = function(count , type ,optionName){
+const illegalCountMessage = function(count, type, optionName) {
   if (type == "tail") {
     if (count == 0) {
       return "";
@@ -166,7 +163,7 @@ const illegalCountMessage = function(count , type ,optionName){
   }
   errorMessage = "head: illegal " + optionName + " count -- " + count;
   return errorMessage;
-}
+};
 
 const isValidOption = function(option) {
   return option == "n" || option == "c";
@@ -180,8 +177,6 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
-
-
 const runFilter = function(parameters, type, readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
@@ -192,8 +187,6 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
   let files = readFiles(readFileSync, fileNames, existsSync);
   return filter(option, count, files, type);
 };
-
-
 
 const errorMessages = function(type, option) {
   let usageMessages = {
@@ -209,7 +202,7 @@ const errorMessages = function(type, option) {
 
 module.exports = {
   filter,
-  options,
+  filters,
   cut,
   readFiles,
   displayFile,
