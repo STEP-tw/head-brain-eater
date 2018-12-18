@@ -3,7 +3,7 @@ const {
   readFiles,
   validateParameters,
   classifyParameters
-} = require("./inputLib");
+} = require("./parseInputLib");
 const { parseOutput } = require("./outputLib");
 
 const filters = function() {
@@ -53,6 +53,7 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
   let { option, count, fileNames } = classifyParameters(parameters);
 
   let errorMessage = validateParameters(option, count, type);
+
   if (errorMessage != null) {
     return errorMessage;
   }

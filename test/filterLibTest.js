@@ -158,7 +158,7 @@ describe("runFilter", function() {
       );
     });
 
-    it("should return illegal count/byte count is not valid value are given", function() {
+    it("should return illegal count/byte when invalid count is given", function() {
       deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
       deepEqual(
         runFilter(["-c", "file1", "file"], "tail", readLine, exists),

@@ -54,26 +54,23 @@ const validateParameters = function(option, count, type) {
     n: "line",
     c: "byte"
   };
-  let errorMessage = null;
-
   let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
     type,
     option
   );
 
   if (!isValidOption(option)) {
-    errorMessage = invalidOptionMsg;
-    return errorMessage;
+    return invalidOptionMsg;
   }
 
   if (isUndefined(count)) {
-    errorMessage = undefinedCountMsg + "\n" + usageMessage;
-    return errorMessage;
+    return undefinedCountMsg + "\n" + usageMessage;
   }
 
   if (!isNaturalNum(count)) {
     return illegalCountMessage(count, type, optionNames[option]);
   }
+  return null;
 };
 
 const illegalCountMessage = function(count, type, optionName) {

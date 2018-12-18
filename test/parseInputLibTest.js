@@ -6,7 +6,7 @@ const {
   readFile,
   errorMessages,
   illegalCountMessage
-} = require("../src/inputLib");
+} = require("../src/parseInputLib");
 
 const readLine = function(name) {
   let files = {
