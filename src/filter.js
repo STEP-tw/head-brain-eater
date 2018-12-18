@@ -1,10 +1,7 @@
 const { last, take } = require("./stringUtil");
-const {
-  readFiles,
-  validateParameters,
-  classifyParameters
-} = require("./parseInput");
+const { readFiles, classifyParameters } = require("./parseInput");
 const { composeOutput } = require("./composeOutput");
+const { validateParameters } = require("./handleExceptions");
 
 const getSeperator = function(option) {
   let seperators = {
