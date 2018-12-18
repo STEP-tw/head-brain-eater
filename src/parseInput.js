@@ -72,5 +72,6 @@ const readFiles = function(fileNames, readFileSync, existsSync) {
 module.exports = {
   readFiles,
   classifyParameters,
+  parseParameters,
   readFile
 };
