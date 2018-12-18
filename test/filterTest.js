@@ -1,5 +1,5 @@
-const deepEqual = require("assert").deepEqual;
-let { filterContent, filter, runFilter } = require("../src/filterLib.js");
+const { deepEqual } = require("assert");
+let { filterContent, filter, runFilter } = require("../src/filter.js");
 
 const readLine = function(name) {
   let files = {

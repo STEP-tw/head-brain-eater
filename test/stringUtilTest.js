@@ -1,5 +1,5 @@
-const { take, last, cut } = require("../src/stringLib");
-const deepEqual = require("assert").deepEqual;
+const { take, last, cut } = require("../src/stringUtil");
+const { deepEqual } = require("assert");
 
 describe("cut", function() {
   it("should return sliced text when text,seperator,start and end is  specified", function() {

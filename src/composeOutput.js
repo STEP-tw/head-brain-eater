@@ -1,4 +1,4 @@
-const parseOutput = function(type, { name, content, exists }) {
+const composeOutput = function(type, { name, content, exists }) {
   if (!exists) {
     return type + ": " + name + ": No such file or directory";
   }
@@ -7,5 +7,5 @@ const parseOutput = function(type, { name, content, exists }) {
 };
 
 module.exports = {
-  parseOutput
+  composeOutput
 };

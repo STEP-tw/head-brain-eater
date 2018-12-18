@@ -1,22 +1,25 @@
-const { last, take } = require("./stringLib");
+const { last, take } = require("./stringUtil");
 const {
   readFiles,
   validateParameters,
   classifyParameters
-} = require("./parseInputLib");
-const { parseOutput } = require("./outputLib");
+} = require("./parseInput");
+const { composeOutput } = require("./composeOutput");
 
-const filters = function() {
-  return {
-    tail: {
-      n: last.bind(null, "\n"),
-      c: last.bind(null, "")
-    },
-    head: {
-      n: take.bind(null, "\n"),
-      c: take.bind(null, "")
-    }
+const getSeperator = function(option) {
+  let seperators = {
+    n: "\n",
+    c: ""
   };
+  return seperators[option];
+};
+
+const getFilter = function(type) {
+  let filters = {
+    head: take,
+    tail: last
+  };
+  return filters[type];
 };
 
 const filterContent = function(filter, count, file) {
@@ -35,7 +38,9 @@ const hasOnlyOneElement = function(elements) {
 };
 
 const filter = function(option, count, files, type = "head") {
-  let filter = filters()[type][option];
+  let seperator = getSeperator(option);
+  let filter = getFilter(type);
+  filter = filter.bind(null, seperator);
   let filteredFiles = files.map(filterContent.bind(null, filter, count));
 
   if (hasOnlyOneElement(files)) {
@@ -46,7 +51,7 @@ const filter = function(option, count, files, type = "head") {
     return file.content;
   }
 
-  return filteredFiles.map(parseOutput.bind(null, type)).join("\n\n");
+  return filteredFiles.map(composeOutput.bind(null, type)).join("\n\n");
 };
 
 const runFilter = function(parameters, type, readFileSync, existsSync) {
@@ -63,7 +68,6 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
 
 module.exports = {
   filter,
-  filters,
   runFilter,
   filterContent
 };

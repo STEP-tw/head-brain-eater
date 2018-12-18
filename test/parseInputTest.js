@@ -1,4 +1,4 @@
-const deepEqual = require("assert").deepEqual;
+const { deepEqual } = require("assert");
 const {
   readFiles,
   validateParameters,
@@ -6,7 +6,7 @@ const {
   readFile,
   errorMessages,
   illegalCountMessage
-} = require("../src/parseInputLib");
+} = require("../src/parseInput");
 
 const readLine = function(name) {
   let files = {
