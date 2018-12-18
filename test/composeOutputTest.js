@@ -1,5 +1,5 @@
 const { composeOutput } = require("../src/composeOutput");
-const { deepEqual } = require("assert");
+const { equal } = require("assert");
 
 describe("composeOutput", function() {
   let file = {
@@ -8,7 +8,7 @@ describe("composeOutput", function() {
     exists: true
   };
   it("should return the content with heading when file name ,file content and exists is given", function() {
-    deepEqual(composeOutput("head", file), "==> file1 <==\nhi");
+    equal(composeOutput("head", file), "==> file1 <==\nhi");
   });
 
   it("should return file not found error when exists is false", function() {
@@ -17,7 +17,7 @@ describe("composeOutput", function() {
       content: "hi",
       exists: false
     };
-    deepEqual(
+    equal(
       composeOutput("head", file),
       "head: file1: No such file or directory"
     );

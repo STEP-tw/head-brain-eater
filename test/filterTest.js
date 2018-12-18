@@ -1,4 +1,4 @@
-const { deepEqual } = require("assert");
+const { deepEqual, equal } = require("assert");
 let { filterContent, filter, runFilter } = require("../src/filter.js");
 
 const readLine = function(name) {
@@ -23,22 +23,19 @@ describe("filter", function() {
       }
     ];
     it("should return specified number of characters from starting of the content given when c is passed as parameter ", function() {
-      deepEqual(filter("c", 5, files, "head"), "Today");
+      equal(filter("c", 5, files, "head"), "Today");
     });
 
     it("should return specified number of lines from starting of  the content given when n is passed as parameter ", function() {
-      deepEqual(
-        filter("n", 2, files, "head"),
-        "Today is a great day\nis'nt it?"
-      );
+      equal(filter("n", 2, files, "head"), "Today is a great day\nis'nt it?");
     });
 
     it("should return specified number of characters from the end of  the content given when c is passed as parameter ", function() {
-      deepEqual(filter("c", 5, files, "tail"), "?\nyes");
+      equal(filter("c", 5, files, "tail"), "?\nyes");
     });
 
     it("should return specified number of lines from the end of  the content given when n is passed as parameter ", function() {
-      deepEqual(filter("n", 2, files, "tail"), "is'nt it?\nyes");
+      equal(filter("n", 2, files, "tail"), "is'nt it?\nyes");
     });
   });
 
@@ -56,28 +53,28 @@ describe("filter", function() {
   ];
 
   it("should return specified number of lines from the starting of the contents  given ", function() {
-    deepEqual(
+    equal(
       filter("n", 2, files, "head"),
       "==> t <==\nToday is a great day\nis'nt it?\n\n==> t2 <==\nhow are you"
     );
   });
 
   it("should return specified number of characters from the starting of the contents  given ", function() {
-    deepEqual(
+    equal(
       filter("c", 5, files, "head"),
       "==> t <==\nToday\n\n==> t2 <==\nhow a"
     );
   });
 
   it("should return specified number of lines from the end of the contents  given ", function() {
-    deepEqual(
+    equal(
       filter("n", 2, files, "tail"),
       "==> t <==\nis'nt it?\nyes\n\n==> t2 <==\nhow are you"
     );
   });
 
   it("should return specified number of characters from the end of the contents  given ", function() {
-    deepEqual(
+    equal(
       filter("c", 5, files, "tail"),
       "==> t <==\n?\nyes\n\n==> t2 <==\ne you"
     );
@@ -91,12 +88,12 @@ describe("filter", function() {
         exists: false
       }
     ];
-    deepEqual(
+    equal(
       filter("c", 5, files, "head"),
       "head: file1: No such file or directory"
     );
 
-    deepEqual(
+    equal(
       filter("c", 5, files, "tail"),
       "tail: file1: No such file or directory"
     );
@@ -106,36 +103,36 @@ describe("filter", function() {
 describe("runFilter", function() {
   describe("head", function() {
     it("should return head result of given file when valid parameters and files are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-n5", "file1"], "head", readLine, exists),
         "this is file1"
       );
-      deepEqual(runFilter(["-c5", "file1"], "head", readLine, exists), "this ");
-      deepEqual(
+      equal(runFilter(["-c5", "file1"], "head", readLine, exists), "this ");
+      equal(
         runFilter(["-c5", "file1", "file2"], "head", readLine, exists),
         "==> file1 <==\nthis \n\n==> file2 <==\nthis "
       );
     });
 
     it("should return illegal count/byte count is not valid value are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-n", 0, "file"], "head", readLine, exists),
         "head: illegal line count -- 0"
       );
-      deepEqual(
+      equal(
         runFilter(["-c", "file1", "file"], "head", readLine, exists),
         "head: illegal byte count -- file1"
       );
     });
 
     it("should return option requires argument message when undefined count is given are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-c", undefined, "file"], "head", readLine, exists),
         "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
       );
     });
     it("should return option is neither n or c are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-e", 0, "file"], "head", readLine, exists),
         "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
       );
@@ -144,30 +141,30 @@ describe("runFilter", function() {
 
   describe("tail", function() {
     it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-n5", "file1"], "tail", readLine, exists),
         "this is file1"
       );
     });
 
     it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-      deepEqual(runFilter(["-c5", "file1"], "tail", readLine, exists), "file1");
-      deepEqual(
+      equal(runFilter(["-c5", "file1"], "tail", readLine, exists), "file1");
+      equal(
         runFilter(["-c5", "file1", "file2"], "tail", readLine, exists),
         "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
       );
     });
 
     it("should return illegal count/byte when invalid count is given", function() {
-      deepEqual(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
-      deepEqual(
+      equal(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
+      equal(
         runFilter(["-c", "file1", "file"], "tail", readLine, exists),
         "tail: illegal offset -- file1"
       );
     });
 
     it("should return option requires argument message when undefined count is given are given", function() {
-      deepEqual(
+      equal(
         runFilter(["-c", undefined, "file"], "tail", readLine, exists),
         "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
       );
@@ -175,7 +172,7 @@ describe("runFilter", function() {
   });
 
   it("should return option is neither n or c are given", function() {
-    deepEqual(
+    equal(
       runFilter(["-e", 0, "file"], "tail", readLine, exists),
       "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
