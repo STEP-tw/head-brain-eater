@@ -63,18 +63,8 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
   return filter(option, count, files, type);
 };
 
-const head = function(parameters, { readFileSync, existsSync }) {
-  return runFilter(parameters, "head", readFileSync, existsSync);
-};
-
-const tail = function(parameters, { readFileSync, existsSync }) {
-  return runFilter(parameters, "tail", readFileSync, existsSync);
-};
-
 module.exports = {
   filter,
   runFilter,
-  mapContent,
-  head,
-  tail
+  mapContent
 };

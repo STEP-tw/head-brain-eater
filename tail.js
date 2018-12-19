@@ -1,7 +1,9 @@
-const fs = require("fs");
-const { tail } = require("./src/filter");
+const { readFileSync, existsSync } = require("fs");
+const { runFilter } = require("./src/filter");
 
 const main = function() {
-  console.log(tail(process.argv.slice(2), { readFileSync, existsSync }));
+  console.log(
+    runFilter(process.argv.slice(2), "tail", readFileSync, existsSync)
+  );
 };
 main();
