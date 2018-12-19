@@ -34,7 +34,7 @@ const hasOnlyOneElement = function(elements) {
   return elements.length == 1;
 };
 
-const filter = function(option, count, files, type = "head") {
+const filter = function(option, count, files, type) {
   let seperator = getSeperator(option);
   let filter = getFilter(type);
   filter = filter.bind(null, seperator);
@@ -63,8 +63,18 @@ const runFilter = function(parameters, type, readFileSync, existsSync) {
   return filter(option, count, files, type);
 };
 
+const head = function(parameters, { readFileSync, existsSync }) {
+  return runFilter(parameters, "head", readFileSync, existsSync);
+};
+
+const tail = function(parameters, { readFileSync, existsSync }) {
+  return runFilter(parameters, "tail", readFileSync, existsSync);
+};
+
 module.exports = {
   filter,
   runFilter,
-  filterContent
+  filterContent,
+  head,
+  tail
 };
