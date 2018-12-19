@@ -104,36 +104,36 @@ describe("runFilter", function() {
   describe("head", function() {
     it("should return head result of given file when valid parameters and files are given", function() {
       equal(
-        runFilter(["-n5", "file1"], "head", readLine, exists),
+        runFilter(["head", "-n5", "file1"], readLine, exists),
         "this is file1"
       );
-      equal(runFilter(["-c5", "file1"], "head", readLine, exists), "this ");
+      equal(runFilter(["head", "-c5", "file1"], readLine, exists), "this ");
       equal(
-        runFilter(["-c5", "file1", "file2"], "head", readLine, exists),
+        runFilter(["head", "-c5", "file1", "file2"], readLine, exists),
         "==> file1 <==\nthis \n\n==> file2 <==\nthis "
       );
     });
 
     it("should return illegal count/byte count is not valid value are given", function() {
       equal(
-        runFilter(["-n", 0, "file"], "head", readLine, exists),
+        runFilter(["head", "-n", 0, "file"], readLine, exists),
         "head: illegal line count -- 0"
       );
       equal(
-        runFilter(["-c", "file1", "file"], "head", readLine, exists),
+        runFilter(["head", "-c", "file1", "file"], readLine, exists),
         "head: illegal byte count -- file1"
       );
     });
 
     it("should return option requires argument message when undefined count is given are given", function() {
       equal(
-        runFilter(["-c", undefined, "file"], "head", readLine, exists),
+        runFilter(["head", "-c", undefined, "file"], readLine, exists),
         "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
       );
     });
     it("should return option is neither n or c are given", function() {
       equal(
-        runFilter(["-e", 0, "file"], "head", readLine, exists),
+        runFilter(["head", "-e", 0, "file"], readLine, exists),
         "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
       );
     });
@@ -142,30 +142,30 @@ describe("runFilter", function() {
   describe("tail", function() {
     it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
       equal(
-        runFilter(["-n5", "file1"], "tail", readLine, exists),
+        runFilter(["tail", "-n5", "file1"], readLine, exists),
         "this is file1"
       );
     });
 
     it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-      equal(runFilter(["-c5", "file1"], "tail", readLine, exists), "file1");
+      equal(runFilter(["tail", "-c5", "file1"], readLine, exists), "file1");
       equal(
-        runFilter(["-c5", "file1", "file2"], "tail", readLine, exists),
+        runFilter(["tail", "-c5", "file1", "file2"], readLine, exists),
         "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
       );
     });
 
     it("should return illegal count/byte when invalid count is given", function() {
-      equal(runFilter(["-n", 0, "file"], "tail", readLine, exists), "");
+      equal(runFilter(["tail", "-n", 0, "file"], readLine, exists), "");
       equal(
-        runFilter(["-c", "file1", "file"], "tail", readLine, exists),
+        runFilter(["tail", "-c", "file1", "file"], readLine, exists),
         "tail: illegal offset -- file1"
       );
     });
 
     it("should return option requires argument message when undefined count is given are given", function() {
       equal(
-        runFilter(["-c", undefined, "file"], "tail", readLine, exists),
+        runFilter(["tail", "-c", undefined, "file"], readLine, exists),
         "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
       );
     });
@@ -173,7 +173,7 @@ describe("runFilter", function() {
 
   it("should return option is neither n or c are given", function() {
     equal(
-      runFilter(["-e", 0, "file"], "tail", readLine, exists),
+      runFilter(["tail", "-e", 0, "file"], readLine, exists),
       "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
   });

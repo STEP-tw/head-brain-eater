@@ -60,7 +60,8 @@ const filter = function(option, count, files, type) {
   return mappedFiles.map(composeOutput.bind(null, type)).join("\n\n");
 };
 
-const runFilter = function(parameters, type, readFileSync, existsSync) {
+const runFilter = function(parameters, readFileSync, existsSync) {
+  const type = parameters.shift();
   let { option, count, fileNames } = classifyParameters(parameters);
 
   let errorMessage = validateParameters(option, count, type);
