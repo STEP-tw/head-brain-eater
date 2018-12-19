@@ -12,16 +12,16 @@ const getSeperator = function(option) {
 };
 
 const getMapper = function(type) {
-  let filters = {
+  let mappers = {
     head: take,
     tail: last
   };
-  return filters[type];
+  return mappers[type];
 };
 
-const filterContent = function(filter, count, file) {
+const mapContent = function(mapper, count, file) {
   let name = file.name;
-  let content = filter(count, file.content);
+  let content = mapper(count, file.content);
   let exists = file.exists;
   return {
     name,
@@ -38,10 +38,10 @@ const filter = function(option, count, files, type) {
   let seperator = getSeperator(option);
   let mapper = getMapper(type);
   mapper = mapper.bind(null, seperator);
-  let filteredFiles = files.map(filterContent.bind(null, mapper, count));
+  let mappedContent = files.map(mapContent.bind(null, mapper, count));
 
   if (hasOnlyOneElement(files)) {
-    let file = filteredFiles[0];
+    let file = mappedContent[0];
     if (!file.exists) {
       return type + ": " + file.name + ": No such file or directory";
     }
@@ -74,7 +74,7 @@ const tail = function(parameters, { readFileSync, existsSync }) {
 module.exports = {
   filter,
   runFilter,
-  filterContent,
+  mapContent,
   head,
   tail
 };
