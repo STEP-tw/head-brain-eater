@@ -1,6 +1,6 @@
 let { head } = require("./src/filter.js");
 
-let { readFileSync, existsSync } = require("fs");
+let fs = require("fs");
 
 const main = function() {
   let parameters = process.argv.slice(2);

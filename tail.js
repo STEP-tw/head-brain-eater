@@ -1,4 +1,4 @@
-const { readFileSync, existsSync } = require("fs");
+const fs = require("fs");
 const { tail } = require("./src/filter");
 
 const main = function() {

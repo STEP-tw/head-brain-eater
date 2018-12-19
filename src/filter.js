@@ -11,7 +11,7 @@ const getSeperator = function(option) {
   return seperators[option];
 };
 
-const getFilter = function(type) {
+const getMapper = function(type) {
   let filters = {
     head: take,
     tail: last
@@ -36,9 +36,9 @@ const hasOnlyOneElement = function(elements) {
 
 const filter = function(option, count, files, type) {
   let seperator = getSeperator(option);
-  let filter = getFilter(type);
-  filter = filter.bind(null, seperator);
-  let filteredFiles = files.map(filterContent.bind(null, filter, count));
+  let mapper = getMapper(type);
+  mapper = mapper.bind(null, seperator);
+  let filteredFiles = files.map(filterContent.bind(null, mapper, count));
 
   if (hasOnlyOneElement(files)) {
     let file = filteredFiles[0];
