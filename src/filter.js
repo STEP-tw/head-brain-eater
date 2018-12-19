@@ -4,11 +4,11 @@ const { composeOutput } = require("./composeOutput");
 const { validateParameters } = require("./handleExceptions");
 
 const getDelimiter = function(option) {
-  const seperators = {
+  const delimiters = {
     line: "\n",
     char: ""
   };
-  return seperators[option];
+  return delimiters[option];
 };
 
 const getMapper = function(type) {
