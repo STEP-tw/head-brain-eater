@@ -44,9 +44,9 @@ const hasOnlyOneElement = function(elements) {
 
 const filter = function(option, count, files, type) {
   let longOption = getLongOption(option);
-  let seperator = getDelimiter(longOption);
+  let delimiter = getDelimiter(longOption);
   let mapper = getMapper(type);
-  mapper = mapper.bind(null, seperator);
+  mapper = mapper.bind(null, delimiter);
   let mappedFiles = files.map(mapContent.bind(null, mapper, count));
 
   if (hasOnlyOneElement(files)) {
