@@ -1,0 +1,25 @@
+{
+  "name": "head-brain-eater",
+  "version": "0.7.0",
+  "description": "can do head",
+  "main": "head.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/head-brain-eater.git"
+  },
+  "author": "Brain-eater",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/head-brain-eater/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/head-brain-eater#readme",
+  "dependencies": {
+    "mocha": "^5.2.0"
+  }
+}
