@@ -38,17 +38,17 @@ const filter = function(option, count, files, type) {
   let seperator = getSeperator(option);
   let mapper = getMapper(type);
   mapper = mapper.bind(null, seperator);
-  let mappedContent = files.map(mapContent.bind(null, mapper, count));
+  let mappedFiles = files.map(mapContent.bind(null, mapper, count));
 
   if (hasOnlyOneElement(files)) {
-    let file = mappedContent[0];
+    let file = mappedFiles[0];
     if (!file.exists) {
       return type + ": " + file.name + ": No such file or directory";
     }
     return file.content;
   }
 
-  return filteredFiles.map(composeOutput.bind(null, type)).join("\n\n");
+  return mappedFiles.map(composeOutput.bind(null, type)).join("\n\n");
 };
 
 const runFilter = function(parameters, type, readFileSync, existsSync) {

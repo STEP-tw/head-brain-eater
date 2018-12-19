@@ -1,5 +1,5 @@
 const { deepEqual, equal } = require("assert");
-let { filterContent, filter, runFilter } = require("../src/filter.js");
+let { mapContent, filter, runFilter } = require("../src/filter.js");
 
 const readLine = function(name) {
   let files = {
@@ -182,7 +182,7 @@ describe("runFilter", function() {
 describe("filterContent", function() {
   it("should return the output of given filter with other parameters count file as parameters to filter", function() {
     deepEqual(
-      filterContent((x, y, z) => y, 3, {
+      mapContent((x, y, z) => y, 3, {
         name: "tilak",
         content: "tilakpuli",
         exists: false
