@@ -3,20 +3,28 @@ const { readFiles, classifyParameters } = require("./parseInput");
 const { composeOutput } = require("./composeOutput");
 const { validateParameters } = require("./handleExceptions");
 
-const getSeperator = function(option) {
-  let seperators = {
-    n: "\n",
-    c: ""
+const getDelimiter = function(option) {
+  const seperators = {
+    line: "\n",
+    char: ""
   };
   return seperators[option];
 };
 
 const getMapper = function(type) {
-  let mappers = {
+  const mappers = {
     head: take,
     tail: last
   };
   return mappers[type];
+};
+
+const getLongOption = function(option) {
+  let longOptions = {
+    n: "line",
+    c: "char"
+  };
+  return longOptions[option];
 };
 
 const mapContent = function(mapper, count, file) {
@@ -35,7 +43,8 @@ const hasOnlyOneElement = function(elements) {
 };
 
 const filter = function(option, count, files, type) {
-  let seperator = getSeperator(option);
+  let longOption = getLongOption(option);
+  let seperator = getDelimiter(longOption);
   let mapper = getMapper(type);
   mapper = mapper.bind(null, seperator);
   let mappedFiles = files.map(mapContent.bind(null, mapper, count));
