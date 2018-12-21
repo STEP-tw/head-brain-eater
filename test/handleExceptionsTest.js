@@ -7,24 +7,27 @@ const {
 
 describe("validateParameters", function() {
   it("should return illegal count when not natural number  is given as 2nd parameter", function() {
-    equal(validateParameters("n", 0, "head"), "head: illegal line count -- 0");
     equal(
-      validateParameters("n", "a", "head"),
+      validateParameters("line", 0, "head"),
+      "head: illegal line count -- 0"
+    );
+    equal(
+      validateParameters("line", "a", "head"),
       "head: illegal line count -- a"
     );
     equal(
-      validateParameters("n", -1, "head"),
+      validateParameters("line", -1, "head"),
       "head: illegal line count -- -1"
     );
     equal(
-      validateParameters("c", "file1", "head"),
+      validateParameters("byte", "file1", "head"),
       "head: illegal byte count -- file1"
     );
   });
 
   it("should return this option requires an argument when count is undefined", function() {
     equal(
-      validateParameters("c", undefined, "head"),
+      validateParameters("byte", undefined, "head"),
       "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
     );
   });
@@ -44,8 +47,8 @@ describe("validateParameters", function() {
   });
 
   it("should return undefined when 1st parameter is n or c and 2nd parameter is a natural number", function() {
-    equal(validateParameters("c", 1, "head"), null);
-    equal(validateParameters("n", 33, "head"), null);
+    equal(validateParameters("byte", 1, "head"), null);
+    equal(validateParameters("line", 33, "head"), null);
   });
 });
 

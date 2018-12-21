@@ -1,14 +1,15 @@
 const validateParameters = function(option, count, type) {
-  let optionNames = {
-    n: "line",
-    c: "byte"
+  let shortOptions = {
+    line: "n",
+    byte: "c"
   };
+  let shortOption = shortOptions[option] || option;
   let { invalidOptionMsg, undefinedCountMsg, usageMessage } = errorMessages(
     type,
-    option
+    shortOption
   );
 
-  if (!isValidOption(option)) {
+  if (!isValidOption(shortOption)) {
     return invalidOptionMsg;
   }
 
@@ -17,19 +18,19 @@ const validateParameters = function(option, count, type) {
   }
 
   if (!isNaturalNum(count)) {
-    return illegalCountMessage(count, type, optionNames[option]);
+    return illegalCountMessage(count, type, option);
   }
   return null;
 };
 
-const illegalCountMessage = function(count, type, optionName) {
+const illegalCountMessage = function(count, type, option) {
   if (type == "tail") {
     if (count == 0) {
       return "";
     }
     return "tail: illegal offset -- " + count;
   }
-  errorMessage = "head: illegal " + optionName + " count -- " + count;
+  errorMessage = "head: illegal " + option + " count -- " + count;
   return errorMessage;
 };
 
@@ -37,8 +38,8 @@ const isNaturalNum = function(num) {
   return !isNaN(num) && num > 0;
 };
 
-const isValidOption = function(option) {
-  return option == "n" || option == "c";
+const isValidOption = function(shortOption) {
+  return shortOption == "n" || shortOption == "c";
 };
 
 const isUndefined = function(element) {

@@ -6,7 +6,7 @@ const { validateParameters } = require("./handleExceptions");
 const getDelimiter = function(option) {
   const delimiters = {
     line: "\n",
-    char: ""
+    byte: ""
   };
   return delimiters[option];
 };
@@ -17,14 +17,6 @@ const getMapper = function(type) {
     tail: last
   };
   return mappers[type];
-};
-
-const getLongOption = function(option) {
-  let longOptions = {
-    n: "line",
-    c: "char"
-  };
-  return longOptions[option];
 };
 
 const mapContent = function(mapper, count, file) {
@@ -43,8 +35,7 @@ const hasOnlyOneElement = function(elements) {
 };
 
 const filter = function(option, count, files, type) {
-  let longOption = getLongOption(option);
-  let delimiter = getDelimiter(longOption);
+  let delimiter = getDelimiter(option);
   let mapper = getMapper(type);
   mapper = mapper.bind(null, delimiter);
   let mappedFiles = files.map(mapContent.bind(null, mapper, count));

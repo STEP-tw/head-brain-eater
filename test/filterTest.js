@@ -1,5 +1,5 @@
 const { deepEqual, equal } = require("assert");
-let { mapContent, filter, runFilter } = require("../src/filter.js");
+const { mapContent, filter, runFilter } = require("../src/filter.js");
 
 const readLine = function(name) {
   let files = {
@@ -23,19 +23,22 @@ describe("filter", function() {
       }
     ];
     it("should return specified number of characters from starting of the content given when c is passed as parameter ", function() {
-      equal(filter("c", 5, files, "head"), "Today");
+      equal(filter("byte", 5, files, "head"), "Today");
     });
 
     it("should return specified number of lines from starting of  the content given when n is passed as parameter ", function() {
-      equal(filter("n", 2, files, "head"), "Today is a great day\nis'nt it?");
+      equal(
+        filter("line", 2, files, "head"),
+        "Today is a great day\nis'nt it?"
+      );
     });
 
     it("should return specified number of characters from the end of  the content given when c is passed as parameter ", function() {
-      equal(filter("c", 5, files, "tail"), "?\nyes");
+      equal(filter("byte", 5, files, "tail"), "?\nyes");
     });
 
     it("should return specified number of lines from the end of  the content given when n is passed as parameter ", function() {
-      equal(filter("n", 2, files, "tail"), "is'nt it?\nyes");
+      equal(filter("line", 2, files, "tail"), "is'nt it?\nyes");
     });
   });
 
@@ -54,28 +57,28 @@ describe("filter", function() {
 
   it("should return specified number of lines from the starting of the contents  given ", function() {
     equal(
-      filter("n", 2, files, "head"),
+      filter("line", 2, files, "head"),
       "==> t <==\nToday is a great day\nis'nt it?\n\n==> t2 <==\nhow are you"
     );
   });
 
   it("should return specified number of characters from the starting of the contents  given ", function() {
     equal(
-      filter("c", 5, files, "head"),
+      filter("byte", 5, files, "head"),
       "==> t <==\nToday\n\n==> t2 <==\nhow a"
     );
   });
 
   it("should return specified number of lines from the end of the contents  given ", function() {
     equal(
-      filter("n", 2, files, "tail"),
+      filter("line", 2, files, "tail"),
       "==> t <==\nis'nt it?\nyes\n\n==> t2 <==\nhow are you"
     );
   });
 
   it("should return specified number of characters from the end of the contents  given ", function() {
     equal(
-      filter("c", 5, files, "tail"),
+      filter("byte", 5, files, "tail"),
       "==> t <==\n?\nyes\n\n==> t2 <==\ne you"
     );
   });
@@ -89,12 +92,12 @@ describe("filter", function() {
       }
     ];
     equal(
-      filter("c", 5, files, "head"),
+      filter("byte", 5, files, "head"),
       "head: file1: No such file or directory"
     );
 
     equal(
-      filter("c", 5, files, "tail"),
+      filter("byte", 5, files, "tail"),
       "tail: file1: No such file or directory"
     );
   });

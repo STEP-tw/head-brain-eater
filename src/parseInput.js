@@ -6,11 +6,11 @@ const isOptionProvided = function(arg) {
   return arg.startsWith("-");
 };
 
-const getOption = function(arg) {
+const getShortOption = function(arg) {
   if (!isWholelNum(arg[1])) {
     return arg[1];
   }
-  return "n";
+  return "line";
 };
 
 const getCount = function(args) {
@@ -38,13 +38,23 @@ const classifyParameters = function(parameters) {
   if (isOptionProvided(parameters[0])) {
     return parseParameters(parameters);
   }
-  return { option: "n", count: "10", fileNames: parameters };
+  return { option: "line", count: "10", fileNames: parameters };
+};
+
+const getOption = function(shortOption) {
+  let options = {
+    n: "line",
+    c: "byte"
+  };
+  let option = options[shortOption];
+  return option || shortOption;
 };
 
 const parseParameters = function(parameters) {
-  let option = getOption(parameters[0]);
+  let shortOption = getShortOption(parameters[0]);
   let count = getCount(parameters);
   let fileNames = getFileNames(parameters);
+  let option = getOption(shortOption);
   return { option, count, fileNames };
 };
 

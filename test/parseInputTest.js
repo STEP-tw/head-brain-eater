@@ -81,19 +81,19 @@ describe("readFiles", function() {
 describe("classifyParameters", function() {
   it("should return an object with  default option and count with given file when neither filters nor count are specified ", function() {
     deepEqual(classifyParameters(["file1"]), {
-      option: "n",
+      option: "line",
       count: 10,
       fileNames: ["file1"]
     });
   });
   it("should return an object with given option,count and file when option is specified ", function() {
     deepEqual(classifyParameters(["-n5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
     deepEqual(classifyParameters(["-n", "5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
@@ -101,7 +101,7 @@ describe("classifyParameters", function() {
 
   it("should return an object with  default option and given count and file when no option but count is given is specified ", function() {
     deepEqual(classifyParameters(["-5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
@@ -111,12 +111,12 @@ describe("classifyParameters", function() {
 describe("parseParameters", function() {
   it("should return an object with given option,count and file when option is specified ", function() {
     deepEqual(parseParameters(["-n5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
     deepEqual(parseParameters(["-n", "5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
@@ -124,7 +124,7 @@ describe("parseParameters", function() {
 
   it("should return an object with  default option and given count and file when no option but count is given is specified ", function() {
     deepEqual(parseParameters(["-5", "file1"]), {
-      option: "n",
+      option: "line",
       count: 5,
       fileNames: ["file1"]
     });
@@ -133,12 +133,12 @@ describe("parseParameters", function() {
 
 it("should return an object with option,count and files when option is specified ", function() {
   deepEqual(parseParameters(["-n", "5", "file1", "file2"]), {
-    option: "n",
+    option: "line",
     count: 5,
     fileNames: ["file1", "file2"]
   });
   deepEqual(parseParameters(["-n5", "file1", "file2"]), {
-    option: "n",
+    option: "line",
     count: 5,
     fileNames: ["file1", "file2"]
   });
@@ -146,7 +146,7 @@ it("should return an object with option,count and files when option is specified
 
 it("should return an object with  default option and given count and files when no option but count is given is specified ", function() {
   deepEqual(parseParameters(["-5", "file1", "file2"]), {
-    option: "n",
+    option: "line",
     count: 5,
     fileNames: ["file1", "file2"]
   });
@@ -154,12 +154,12 @@ it("should return an object with  default option and given count and files when 
 
 it("should return and object with option c and given count and file if c is given as option in input ", function() {
   deepEqual(parseParameters(["-c5", "file1"]), {
-    option: "c",
+    option: "byte",
     count: 5,
     fileNames: ["file1"]
   });
   deepEqual(parseParameters(["-c", "5", "file1"]), {
-    option: "c",
+    option: "byte",
     count: 5,
     fileNames: ["file1"]
   });
@@ -167,12 +167,12 @@ it("should return and object with option c and given count and file if c is give
 
 it("should return and object with option c and given count and files if c is given as option in input ", function() {
   deepEqual(parseParameters(["-c5", "file1", "file2"]), {
-    option: "c",
+    option: "byte",
     count: 5,
     fileNames: ["file1", "file2"]
   });
   deepEqual(parseParameters(["-c", "5", "file1", "file2"]), {
-    option: "c",
+    option: "byte",
     count: 5,
     fileNames: ["file1", "file2"]
   });
