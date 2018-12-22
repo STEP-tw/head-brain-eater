@@ -1,4 +1,4 @@
-const composeOutput = function(type, { name, content, exists }) {
+const formatOutput = function(type, { name, content, exists }) {
   if (!exists) {
     return getErrorMessage(type, name);
   }
@@ -13,6 +13,4 @@ const getHeading = function(name, content) {
   return "==> " + name + " <==\n" + content;
 };
 
-module.exports = {
-  composeOutput
-};
+module.exports = { formatOutput };

@@ -1,6 +1,6 @@
 const { last, take } = require("./stringUtil");
 const { readFiles, classifyParameters } = require("./parseInput");
-const { composeOutput } = require("./composeOutput");
+const { formatOutput } = require("./formatOutput");
 const { validateParameters } = require("./handleExceptions");
 
 const getDelimiter = function(option) {
@@ -11,12 +11,12 @@ const getDelimiter = function(option) {
   return delimiters[option];
 };
 
-const getMapper = function(type) {
+const getMapper = function(utility) {
   const mappers = {
     head: take,
     tail: last
   };
-  return mappers[type];
+  return mappers[utility];
 };
 
 const mapContent = function(mapper, count, file) {
@@ -34,34 +34,34 @@ const hasOnlyOneElement = function(elements) {
   return elements.length == 1;
 };
 
-const filter = function(option, count, files, type) {
+const filter = function(option, count, files, utility) {
   let delimiter = getDelimiter(option);
-  let mapper = getMapper(type);
+  let mapper = getMapper(utility);
   mapper = mapper.bind(null, delimiter);
   let mappedFiles = files.map(mapContent.bind(null, mapper, count));
 
   if (hasOnlyOneElement(files)) {
     let file = mappedFiles[0];
     if (!file.exists) {
-      return type + ": " + file.name + ": No such file or directory";
+      return utility + ": " + file.name + ": No such file or directory";
     }
     return file.content;
   }
 
-  return mappedFiles.map(composeOutput.bind(null, type)).join("\n\n");
+  return mappedFiles.map(formatOutput.bind(null, utility)).join("\n\n");
 };
 
 const runFilter = function(parameters, readFileSync, existsSync) {
-  const type = parameters.shift();
+  const utility = parameters.shift();
   let { option, count, fileNames } = classifyParameters(parameters);
 
-  let errorMessage = validateParameters(option, count, type);
+  let errorMessage = validateParameters(option, count, utility);
 
   if (errorMessage != null) {
     return errorMessage;
   }
   let files = readFiles(fileNames, readFileSync, existsSync);
-  return filter(option, count, files, type);
+  return filter(option, count, files, utility);
 };
 
 const head = function(parameters, fs) {
