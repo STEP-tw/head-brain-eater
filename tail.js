@@ -1,8 +1,18 @@
+const { tail } = require("./src/filter.js");
+const { classifyParameters } = require("./src/parseInput");
+const { validateParameters } = require("./src/handleExceptions");
 const fs = require("fs");
-const { tail } = require("./src/filter");
 
 const main = function() {
   let parameters = process.argv.slice(2);
-  console.log(tail(parameters, fs));
+  let { option, count, fileNames } = classifyParameters(parameters);
+
+  let errorMessage = validateParameters(option, count, "tail");
+
+  if (errorMessage != null) {
+    return errorMessage;
+  }
+  console.log(tail({ option, count, fileNames }, fs));
 };
+
 main();

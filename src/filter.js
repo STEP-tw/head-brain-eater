@@ -53,25 +53,18 @@ const filter = function(option, count, files, utility) {
 
 const runFilter = function(parameters, readFileSync, existsSync) {
   const utility = parameters.shift();
-  let { option, count, fileNames } = classifyParameters(parameters);
-
-  let errorMessage = validateParameters(option, count, utility);
-
-  if (errorMessage != null) {
-    return errorMessage;
-  }
-  let files = readFiles(fileNames, readFileSync, existsSync);
-  return filter(option, count, files, utility);
 };
 
 const head = function(parameters, fs) {
-  parameters.unshift("head");
-  return runFilter(parameters, fs.readFileSync, fs.existsSync);
+  let { option, count, fileNames } = parameters;
+  let files = readFiles(fileNames, fs.readFileSync, fs.existsSync);
+  return filter(option, count, files, "head");
 };
 
 const tail = function(parameters, fs) {
-  parameters.unshift("tail");
-  return runFilter(parameters, fs.readFileSync, fs.existsSync);
+  let { option, count, fileNames } = parameters;
+  let files = readFiles(fileNames, fs.readFileSync, fs.existsSync);
+  return filter(option, count, files, "tail");
 };
 
 module.exports = {
