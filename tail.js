@@ -1,4 +1,4 @@
-const { tail } = require("./src/filter.js");
+const { tail } = require("./src/headAndTail.js");
 const { classifyParameters } = require("./src/parseInput");
 const { validateParameters } = require("./src/handleExceptions");
 const fs = require("fs");

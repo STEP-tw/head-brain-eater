@@ -1,5 +1,5 @@
 const { deepEqual, equal } = require("assert");
-const { mapContent, filter, runFilter } = require("../src/filter.js");
+const { mapContent, filter, runFilter } = require("../src/headAndTail.js");
 
 const readLine = function(name) {
   let files = {
@@ -99,85 +99,6 @@ describe("filter", function() {
     equal(
       filter("byte", 5, files, "tail"),
       "tail: file1: No such file or directory"
-    );
-  });
-});
-
-describe("runFilter", function() {
-  describe("head", function() {
-    it("should return head result of given file when valid parameters and files are given", function() {
-      equal(
-        runFilter(["head", "-n5", "file1"], readLine, exists),
-        "this is file1"
-      );
-      equal(runFilter(["head", "-c5", "file1"], readLine, exists), "this ");
-      equal(
-        runFilter(["head", "-c5", "file1", "file2"], readLine, exists),
-        "==> file1 <==\nthis \n\n==> file2 <==\nthis "
-      );
-    });
-
-    it("should return illegal count/byte count is not valid value are given", function() {
-      equal(
-        runFilter(["head", "-n", 0, "file"], readLine, exists),
-        "head: illegal line count -- 0"
-      );
-      equal(
-        runFilter(["head", "-c", "file1", "file"], readLine, exists),
-        "head: illegal byte count -- file1"
-      );
-    });
-
-    it("should return option requires argument message when undefined count is given are given", function() {
-      equal(
-        runFilter(["head", "-c", undefined, "file"], readLine, exists),
-        "head: option requires an argument -- c\nusage: head [-n lines | -c bytes] [file ...]"
-      );
-    });
-    it("should return option is neither n or c are given", function() {
-      equal(
-        runFilter(["head", "-e", 0, "file"], readLine, exists),
-        "head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]"
-      );
-    });
-  });
-
-  describe("tail", function() {
-    it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-      equal(
-        runFilter(["tail", "-n5", "file1"], readLine, exists),
-        "this is file1"
-      );
-    });
-
-    it("should return specified numer of lines from bottom of given file when valid parameters and files are given", function() {
-      equal(runFilter(["tail", "-c5", "file1"], readLine, exists), "file1");
-      equal(
-        runFilter(["tail", "-c5", "file1", "file2"], readLine, exists),
-        "==> file1 <==\nfile1\n\n==> file2 <==\nfile2"
-      );
-    });
-
-    it("should return illegal count/byte when invalid count is given", function() {
-      equal(runFilter(["tail", "-n", 0, "file"], readLine, exists), "");
-      equal(
-        runFilter(["tail", "-c", "file1", "file"], readLine, exists),
-        "tail: illegal offset -- file1"
-      );
-    });
-
-    it("should return option requires argument message when undefined count is given are given", function() {
-      equal(
-        runFilter(["tail", "-c", undefined, "file"], readLine, exists),
-        "tail: option requires an argument -- c\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
-      );
-    });
-  });
-
-  it("should return option is neither n or c are given", function() {
-    equal(
-      runFilter(["tail", "-e", 0, "file"], readLine, exists),
-      "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
     );
   });
 });
