@@ -1,7 +1,6 @@
 const { last, take } = require("./stringUtil");
-const { readFiles, classifyParameters } = require("./parseInput");
+const { readFiles } = require("./parseInput");
 const { formatOutput } = require("./formatOutput");
-const { validateParameters } = require("./handleExceptions");
 
 const getDelimiter = function(option) {
   const delimiters = {
@@ -34,13 +33,13 @@ const hasOnlyOneElement = function(elements) {
   return elements.length == 1;
 };
 
-const filter = function(option, count, files, utility) {
+const filter = function(option, count, fileObjects, utility) {
   let delimiter = getDelimiter(option);
   let mapper = getMapper(utility);
   mapper = mapper.bind(null, delimiter);
-  let mappedFiles = files.map(mapContent.bind(null, mapper, count));
+  let mappedFiles = fileObjects.map(mapContent.bind(null, mapper, count));
 
-  if (hasOnlyOneElement(files)) {
+  if (hasOnlyOneElement(fileObjects)) {
     let file = mappedFiles[0];
     if (!file.exists) {
       return utility + ": " + file.name + ": No such file or directory";
@@ -57,14 +56,14 @@ const runFilter = function(parameters, readFileSync, existsSync) {
 
 const head = function(parameters, fs) {
   let { option, count, fileNames } = parameters;
-  let files = readFiles(fileNames, fs.readFileSync, fs.existsSync);
-  return filter(option, count, files, "head");
+  let fileObjects = readFiles(fileNames, fs.readFileSync, fs.existsSync);
+  return filter(option, count, fileObjects, "head");
 };
 
 const tail = function(parameters, fs) {
   let { option, count, fileNames } = parameters;
-  let files = readFiles(fileNames, fs.readFileSync, fs.existsSync);
-  return filter(option, count, files, "tail");
+  let fileObjects = readFiles(fileNames, fs.readFileSync, fs.existsSync);
+  return filter(option, count, fileObjects, "tail");
 };
 
 module.exports = {
