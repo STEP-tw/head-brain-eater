@@ -10,7 +10,8 @@ const main = function() {
   let errorMessage = validateParameters(option, count, "tail");
 
   if (errorMessage != null) {
-    return errorMessage;
+    console.log(errorMessage);
+    return -1;
   }
   console.log(tail({ option, count, fileNames }, fs));
 };
